@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | Padma Raj Keshri Publications</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+  <div class="flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-slate-950 border-r border-slate-800 p-6 flex flex-col justify-between min-h-screen">
+      <div class="space-y-8">
+        <div>
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-widest">PADMA RAJ KESHRI</h2>
+          <p class="text-xs text-slate-400">Publications &amp; Leads CMS</p>
+        </div>
+        <nav class="space-y-2 text-xs font-semibold">
+          <a href="#" class="flex items-center space-x-3 px-4 py-2.5 rounded-lg bg-indigo-600 text-white"><i class="fa-solid fa-users"></i><span>Captured Leads</span></a>
+          <a href="#" class="flex items-center space-x-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-900 hover:text-white"><i class="fa-solid fa-file-pdf"></i><span>PDF Magazines</span></a>
+          <a href="#" class="flex items-center space-x-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-900 hover:text-white"><i class="fa-solid fa-chart-line"></i><span>Ad Revenue (60/40)</span></a>
+        </nav>
+      </div>
+      <a href="index.html" class="flex items-center space-x-2 text-xs text-slate-400 hover:text-white"><i class="fa-solid fa-arrow-left"></i><span>Back to Website</span></a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8 space-y-8">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-white">Captured Viewer Leads</h1>
+          <p class="text-xs text-slate-400 mt-1">Visitors who registered to read your magazine editions.</p>
+        </div>
+        <button onclick="exportCSV()" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center space-x-2">
+          <i class="fa-solid fa-file-csv"></i>
+          <span>Export Leads (CSV)</span>
+        </button>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-3 gap-6">
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+          <div class="text-xs text-slate-400 uppercase font-semibold">Total Verified Leads</div>
+          <div class="text-2xl font-bold text-white mt-1" id="leadCount">0</div>
+        </div>
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+          <div class="text-xs text-slate-400 uppercase font-semibold">Est. Ad Revenue (40% Client Share)</div>
+          <div class="text-2xl font-bold text-emerald-400 mt-1">₹14,200 / mo</div>
+        </div>
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+          <div class="text-xs text-slate-400 uppercase font-semibold">Cloud Storage Used</div>
+          <div class="text-2xl font-bold text-indigo-400 mt-1">1.4 GB / 10 GB</div>
+        </div>
+      </div>
+
+      <!-- Leads Table -->
+      <div class="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-900 text-slate-400 uppercase border-b border-slate-800">
+            <tr>
+              <th class="p-4">Visitor Name</th>
+              <th class="p-4">Email Address</th>
+              <th class="p-4">WhatsApp / Phone</th>
+              <th class="p-4">Affiliation</th>
+              <th class="p-4">Registered Date</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTableBody" class="divide-y divide-slate-800 text-slate-300">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function loadLeads() {
+      var leads = JSON.parse(localStorage.getItem("padma_leads") || "[]");
+      // Add demo sample leads if empty
+      if (leads.length === 0) {
+        leads = [
+          { name: "Ananya Sharma", email: "ananya.s@nift.ac.in", phone: "+91 98765 43210", purpose: "NIFT Delhi (Fashion Design)", timestamp: "2026-08-21T10:30:00Z" },
+          { name: "Rohan Varma", email: "rohan.v@nid.edu", phone: "+91 98111 22334", purpose: "NID Ahmedabad (Textile Design)", timestamp: "2026-08-21T09:15:00Z" },
+          { name: "Kavita Singhal", email: "kavita@couturehouse.in", phone: "+91 99220 33445", purpose: "Luxury Retail Merchandiser", timestamp: "2026-08-20T18:45:00Z" }
+        ];
+        localStorage.setItem("padma_leads", JSON.stringify(leads));
+      }
+
+      document.getElementById("leadCount").textContent = leads.length;
+      var tbody = document.getElementById("leadsTableBody");
+      tbody.innerHTML = "";
+      leads.forEach(function(l) {
+        var tr = document.createElement("tr");
+        tr.innerHTML = '<td class="p-4 font-bold text-white">' + l.name + '</td>' +
+          '<td class="p-4">' + l.email + '</td>' +
+          '<td class="p-4 text-emerald-400 font-mono">' + l.phone + '</td>' +
+          '<td class="p-4">' + l.purpose + '</td>' +
+          '<td class="p-4 text-slate-400">' + new Date(l.timestamp).toLocaleDateString() + '</td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+    function exportCSV() {
+      var leads = JSON.parse(localStorage.getItem("padma_leads") || "[]");
+      var csv = "Name,Email,Phone,Affiliation,Date\n";
+      leads.forEach(function(l) {
+        csv += '"' + l.name + '","' + l.email + '","' + l.phone + '","' + l.purpose + '","' + l.timestamp + '"\n';
+      });
+      var blob = new Blob([csv], { type: "text/csv" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "Padma_Raj_Keshri_Leads.csv";
+      a.click();
+    }
+
+    loadLeads();
+  </script>
+</body>
+</html>
