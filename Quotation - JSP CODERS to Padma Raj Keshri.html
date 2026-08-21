@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quotation - JSP CODERS to Padma Raj Keshri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #1e2530; }
+
+  .page-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 30px 40px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    font-size: 11.8px;
+    line-height: 1.46;
+  }
+
+  .letterhead {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 3px solid #c0392b;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+  }
+  .brand-logo-wrap { display: flex; align-items: center; gap: 10px; }
+  .brand-logo { width: 40px; height: 40px; object-fit: contain; }
+  .brand-name { font-family: 'Poppins', sans-serif; font-size: 20px; font-weight: 800; color: #c0392b; margin: 0; line-height: 1.1; }
+  .brand-tag { font-size: 8.5px; color: #6b7280; margin-top: 2px; letter-spacing: 0.5px; text-transform: uppercase; font-weight: 600; }
+  .brand-contact { text-align: right; font-size: 10.5px; color: #4b5563; }
+  .brand-contact div { margin-bottom: 1.5px; }
+
+  .doc-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+    padding-bottom: 4px;
+    border-bottom: 1px dashed #e5e7eb;
+  }
+  .doc-title { font-family: 'Poppins', sans-serif; font-size: 15.5px; font-weight: 700; color: #1e2530; letter-spacing: 0.8px; }
+  .doc-meta { font-size: 10.5px; color: #6b7280; text-align: right; font-weight: 500; }
+
+  .parties { display: flex; justify-content: space-between; gap: 14px; margin-bottom: 10px; }
+  .party-block { flex: 1; background: #fafafa; padding: 7px 11px; border-radius: 4px; border: 1px solid #f0f0f0; }
+  .party-label { font-size: 8.5px; font-weight: 700; color: #c0392b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+  .party-name { font-weight: 700; font-size: 12px; margin-bottom: 1px; color: #111827; }
+  .party-addr { color: #4b5563; font-size: 10.5px; line-height: 1.35; }
+
+  .salutation { font-weight: 600; margin-bottom: 3px; font-size: 11.5px; }
+  .intro-text { color: #374151; margin-bottom: 10px; font-size: 11.2px; line-height: 1.4; }
+
+  h2.section {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11.2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #c0392b;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 2px;
+    margin: 11px 0 5px;
+  }
+
+  .scope-block {
+    border: 1px solid #e5e7eb;
+    border-left: 3.5px solid #c0392b;
+    border-radius: 4px;
+    background: #fdfdfd;
+    padding: 5px 10px 6px;
+    margin-bottom: 4px;
+  }
+  .scope-title { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 10.8px; margin-bottom: 2px; color: #1e2530; }
+  ul.scope-sub { margin: 0; padding-left: 14px; font-size: 10.2px; color: #4b5563; }
+  ul.scope-sub li { margin-bottom: 1.5px; }
+
+  .total-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1e2530;
+    color: #fff;
+    padding: 7px 12px;
+    border-radius: 4px;
+    margin-top: 3px;
+  }
+  .total-banner .label-grp { display: flex; flex-direction: column; }
+  .total-banner .label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.5px; color: #d1d5db; font-weight: 600; }
+  .total-banner .sublabel { font-size: 9px; color: #9ca3af; }
+  .total-banner .value { font-family: 'Poppins', sans-serif; font-size: 17px; font-weight: 800; color: #ffffff; }
+
+  table.pay { width: 100%; border-collapse: collapse; margin-top: 4px; font-size: 10.2px; }
+  table.pay th, table.pay td { border: 1px solid #e0e2e6; padding: 3.5px 6px; text-align: left; }
+  table.pay th { background: #faf4f3; color: #7a2318; font-weight: 700; font-size: 9.2px; text-transform: uppercase; }
+  table.pay td.amt, table.pay th.amt { text-align: right; white-space: nowrap; }
+  table.pay tr.subtot td { background: #f9fafb; font-weight: 600; }
+  table.pay tr.tax td { background: #fff8f7; color: #991b1b; font-weight: 600; }
+  table.pay tr.total td { font-weight: 700; background: #f3f4f6; }
+
+  /* Monetization Box */
+  .revshare-box {
+    border: 1.5px solid #2563eb;
+    background: #f0f7ff;
+    border-radius: 4px;
+    padding: 7px 11px;
+    margin-top: 5px;
+  }
+  .revshare-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3px;
+  }
+  .revshare-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1e40af;
+  }
+  .revshare-badge {
+    background: #1e40af;
+    color: #fff;
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.4px;
+  }
+  .revshare-splits {
+    display: flex;
+    gap: 8px;
+    margin: 4px 0;
+  }
+  .split-card {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #bfdbfe;
+    border-radius: 4px;
+    padding: 5px 8px;
+    text-align: center;
+  }
+  .split-pct { font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 800; color: #1e40af; }
+  .split-desc { font-size: 9px; color: #475569; font-weight: 600; }
+  ul.revshare-bullets { margin: 3px 0 0; padding-left: 14px; font-size: 9.8px; color: #334155; }
+  ul.revshare-bullets li { margin-bottom: 1.5px; }
+
+  .timeline-box {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    background: #faf4f3;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-top: 3px;
+    font-size: 10.2px;
+  }
+  .timeline-box .big { font-family: 'Poppins', sans-serif; font-size: 11.5px; font-weight: 800; color: #c0392b; }
+
+  .support-grid { display: flex; gap: 8px; margin-top: 3px; }
+  .support-card { flex: 1; border: 1px solid #e5e7eb; border-left: 3px solid #c0392b; padding: 5px 8px; border-radius: 4px; background: #fafafa; }
+  .support-card .card-title { font-weight: 700; font-size: 10.2px; margin-bottom: 1px; color: #1f2937; }
+  .support-card .card-body { font-size: 9.8px; color: #4b5563; }
+  .support-card .card-note { font-size: 8.8px; color: #6b7280; margin-top: 1px; }
+
+  ul.terms { margin: 0; padding-left: 14px; font-size: 9.8px; color: #4b5563; }
+  ul.terms li { margin-bottom: 1.5px; }
+
+  .sign-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid #e5e7eb;
+  }
+  .sign-block { font-size: 10.2px; }
+  .sign-block .for { font-size: 9.2px; color: #6b7280; font-weight: 600; text-transform: uppercase; margin-bottom: 10px; }
+  .team-list div { margin-bottom: 1px; color: #374151; }
+  .sig-line { border-top: 1px solid #9ca3af; width: 150px; text-align: center; padding-top: 2px; font-size: 9.8px; color: #6b7280; }
+
+  .footer-note {
+    text-align: center;
+    font-size: 8.8px;
+    color: #9ca3af;
+    margin-top: 10px;
+    border-top: 1px solid #f3f4f6;
+    padding-top: 3px;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .page-container {
+      box-shadow: none;
+      padding: 0;
+      margin: 0;
+      max-width: 100%;
+      font-size: 10.2px;
+      line-height: 1.32;
+    }
+    @page { size: A4; margin: 7mm 10mm; }
+    .scope-block { padding: 3.5px 7px; margin-bottom: 2.5px; }
+    h2.section { margin: 8px 0 2.5px; padding-bottom: 1px; }
+    .total-banner { padding: 4px 8px; margin-top: 2px; }
+    table.pay th, table.pay td { padding: 2.5px 4.5px; }
+    .revshare-box { padding: 5px 8px; margin-top: 3px; }
+    .sign-row { margin-top: 8px; padding-top: 4px; }
+    .footer-note { margin-top: 6px; padding-top: 2px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-container">
+
+  <!-- LETTERHEAD -->
+  <div class="letterhead">
+    <div class="brand-logo-wrap">
+      <img class="brand-logo" src="data:image/png;base64,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" alt="JSP CODERS Logo">
+      <div>
+        <h1 class="brand-name">JSP CODERS</h1>
+        <div class="brand-tag">Software Design &amp; Development</div>
+      </div>
+    </div>
+    <div class="brand-contact">
+      <div>Aadsar Bass, Ward No. 29</div>
+      <div>Shri Dungargarh, Bikaner, Rajasthan – 331803</div>
+      <div>jspcoders@gmail.com &nbsp;|&nbsp; <strong>+91 89552 26422</strong></div>
+      <div>UDYAM Reg. No.: UDYAM-RJ-08-0136093</div>
+    </div>
+  </div>
+
+  <!-- TITLE & META -->
+  <div class="doc-title-row">
+    <div class="doc-title">PROJECT QUOTATION &amp; PARTNERSHIP PROPOSAL</div>
+    <div class="doc-meta">
+      Quotation No.: JSPC/QTN/2026-08/07<br>
+      Date: 21-08-2026
+    </div>
+  </div>
+
+  <!-- PARTIES -->
+  <div class="parties">
+    <div class="party-block">
+      <div class="party-label">Quotation From</div>
+      <div class="party-name">JSP CODERS</div>
+      <div class="party-addr">
+        Aadsar Bass, Ward No. 29, Shri Dungargarh,<br>
+        Bikaner, Rajasthan – 331803<br>
+        jspcoders@gmail.com | <strong>+91 89552 26422</strong>
+      </div>
+    </div>
+    <div class="party-block">
+      <div class="party-label">Quotation To</div>
+      <div class="party-name">Padma Raj Keshri</div>
+      <div class="party-addr">
+        Designer Portfolio &amp; Publications Archive<br>
+        Fashion &amp; Retail Designer / Design Educator<br>
+        Contact: <strong>+91 90369 39773</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="salutation">Dear Padma Raj Keshri Sir,</div>
+  <div class="intro-text">
+    Thank you for the opportunity to discuss your requirements. Based on our conversation regarding the migration of your 100+ publication archives from Issuu to a dedicated self-hosted digital magazine &amp; portfolio platform, we are pleased to submit the following quotation for the complete design, engineering, and deployment of your bespoke platform, along with a strategic <strong>Ad Revenue &amp; Monetization Partnership</strong>.
+  </div>
+
+  <!-- SCOPE OF WORK -->
+  <h2 class="section">1. Scope of Work (Core Platform)</h2>
+
+  <div class="scope-block">
+    <div class="scope-title">A. Interactive 3D Flipbook Magazine Engine (Issuu Replacement)</div>
+    <ul class="scope-sub">
+      <li>Realistic animated page-turn &amp; touch-swipe experience for multi-page PDF documents (Kindle / physical magazine feel)</li>
+      <li>Fully responsive across smartphones (touch swipe), iPads/tablets (dual-page mode), and desktops with high-res zoom &amp; thumbnail navigation</li>
+      <li>Categorization: Fashion Shows, Retail Projects, Education &amp; Workshops, Monthly Editions (Jan, Feb, etc.), and Press Clippings</li>
+      <li>Publication Manager: Easy-to-use admin dashboard to upload, update, categorize, or delete PDF magazine editions anytime</li>
+    </ul>
+  </div>
+
+  <div class="scope-block">
+    <div class="scope-title">B. Gated Access &amp; Automated Lead Generation System</div>
+    <ul class="scope-sub">
+      <li>Mandatory viewer registration wall requesting <strong>Full Name, Email ID, and WhatsApp / Phone Number</strong> before unlocking full magazine reading</li>
+      <li>Live Lead Capture &amp; Sync: Captured visitor details are recorded securely and sync directly to an exportable dashboard / Google Sheet</li>
+      <li>Returning visitor recognition to avoid redundant re-prompting for verified users</li>
+    </ul>
+  </div>
+
+  <div class="scope-block">
+    <div class="scope-title">C. Pinterest-Style Masonry Gallery &amp; Monthly Editorial Blog</div>
+    <ul class="scope-sub">
+      <li>Dynamic masonry grid layout showcasing thousands of high-resolution JPEG runway, fashion show, and retail installation images</li>
+      <li>Full-screen lightbox zoom and high-speed media preview with progressive image loading</li>
+      <li>Dedicated Press, News &amp; Monthly Blog module to publish design articles, newspaper clippings, and milestone achievements</li>
+    </ul>
+  </div>
+
+  <div class="scope-block">
+    <div class="scope-title">D. Minimalist Luxury Indigo UI &amp; High-Traffic Cloud Infrastructure</div>
+    <ul class="scope-sub">
+      <li>Bespoke luxury editorial aesthetic utilizing your requested <strong>Indigo Color Palette</strong> (Deep Indigo, Slate Blue, Crisp White, Slate Grays)</li>
+      <li>5 Core Page Architecture: Home / Shelf, Magazine Catalog, Masonry Gallery, Press &amp; Blog, About &amp; Direct WhatsApp / Social Contact</li>
+      <li>High-traffic cloud storage (10 GB+) &amp; Cloudflare CDN architecture engineered to effortlessly handle 100k–300k+ monthly viral views with near-zero recurring hosting costs</li>
+    </ul>
+  </div>
+
+  <!-- COMMERCIAL TERMS -->
+  <h2 class="section">2. Commercial Terms &amp; Payment Schedule (18% Tax Included)</h2>
+  <div class="total-banner">
+    <div class="label-grp">
+      <span class="label">Total Project Investment (18% GST Included)</span>
+      <span class="sublabel">Base Amount: ₹38,000 + 18% GST: ₹6,840</span>
+    </div>
+    <span class="value">₹44,840/-</span>
+  </div>
+
+  <table class="pay">
+    <thead>
+      <tr>
+        <th>Milestone / Stage</th>
+        <th class="amt">%</th>
+        <th class="amt">Base Amount</th>
+        <th class="amt">Total (Incl. 18% GST)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1. Advance / Prepayment — on project confirmation &amp; kickoff</td>
+        <td class="amt">35%</td>
+        <td class="amt">₹13,300/-</td>
+        <td class="amt">₹15,694/-</td>
+      </tr>
+      <tr>
+        <td>2. First Interactive Handover — Flipbook Engine &amp; Indigo UI Prototype</td>
+        <td class="amt">35%</td>
+        <td class="amt">₹13,300/-</td>
+        <td class="amt">₹15,694/-</td>
+      </tr>
+      <tr>
+        <td>3. Pre-Deployment — Lead Gate, Masonry Gallery &amp; Cloud Setup</td>
+        <td class="amt">15%</td>
+        <td class="amt">₹5,700/-</td>
+        <td class="amt">₹6,726/-</td>
+      </tr>
+      <tr>
+        <td>4. Final Handover &amp; Go-Live on Custom Domain (.org)</td>
+        <td class="amt">15%</td>
+        <td class="amt">₹5,700/-</td>
+        <td class="amt">₹6,726/-</td>
+      </tr>
+      <tr class="subtot">
+        <td colspan="2">Subtotal (Base Platform Setup)</td>
+        <td class="amt" colspan="2">₹38,000/-</td>
+      </tr>
+      <tr class="tax">
+        <td colspan="2">Goods &amp; Services Tax (GST @ 18%)</td>
+        <td class="amt" colspan="2">+ ₹6,840/-</td>
+      </tr>
+      <tr class="total">
+        <td colspan="2"><strong>Grand Total (All Inclusive)</strong></td>
+        <td class="amt" colspan="2"><strong>₹44,840/-</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- AD REVENUE SHARING PARTNERSHIP (60% JSP CODERS / 40% CLIENT) -->
+  <h2 class="section">3. Strategic Ad Revenue &amp; Monetization Partnership (60% / 40%)</h2>
+  <div class="revshare-box">
+    <div class="revshare-header">
+      <span class="revshare-title">⚡ High-Volume Traffic Monetization Partnership</span>
+      <span class="revshare-badge">60% JSP CODERS / 40% Client Split</span>
+    </div>
+    <div class="revshare-splits">
+      <div class="split-card">
+        <div class="split-pct">60%</div>
+        <div class="split-desc">To JSP CODERS (Ad Ops, Tech &amp; Maintenance)</div>
+      </div>
+      <div class="split-card">
+        <div class="split-pct">40%</div>
+        <div class="split-desc">To Client (Padma Raj Keshri — Traffic Share)</div>
+      </div>
+    </div>
+    <ul class="revshare-bullets">
+      <li><strong>Monetization Channels:</strong> Integration of programmatic Google AdSense / Header Bidding units on magazine shelf &amp; gallery pages, plus native sponsored brand banners inside monthly PDF flipbook editions.</li>
+      <li><strong>NIFT / NID Educational Brand Slots:</strong> Monetizing your 100k–300k+ monthly impressions across 200+ WhatsApp groups with targeted design software, fabric mills, and academic course promos.</li>
+      <li><strong>Full Management &amp; Payout:</strong> JSP CODERS handles 100% of technical ad placement, server scaling, and revenue optimization, disbursing 40% net revenue directly to your bank account monthly.</li>
+    </ul>
+  </div>
+
+  <!-- TIMELINE & SUPPORT -->
+  <h2 class="section">4. Project Timeline &amp; Post-Delivery Support</h2>
+  <div class="timeline-box">
+    <span class="big">3 Weeks</span>
+    <span>from the date of advance payment and receipt of sample PDF/image assets, subject to timely client reviews.</span>
+  </div>
+
+  <div class="support-grid">
+    <div class="support-card">
+      <div class="card-title">Free Technical Support — 3 Months</div>
+      <div class="card-body">Covers bug fixes, performance tuning, CDN caching verification, and technical assistance after go-live.</div>
+      <div class="card-note">* Excludes major feature additions which are quoted separately.</div>
+    </div>
+    <div class="support-card">
+      <div class="card-title">Cloud Setup &amp; Deployment Assistance</div>
+      <div class="card-body">Complete configuration of 10 GB cloud storage, Cloudflare CDN integration, and custom domain linking.</div>
+      <div class="card-note">* Optional AMC: 10% p.a. after 3 months.</div>
+    </div>
+  </div>
+
+  <!-- TERMS -->
+  <h2 class="section">5. Terms &amp; Conditions</h2>
+  <ul class="terms">
+    <li>This quotation is valid for 15 days from the date of issue.</li>
+    <li>All PDF publications, editorial text, high-res photos, and domain access credentials will be provided by the client.</li>
+    <li>Ad revenue sharing (60% JSP CODERS / 40% Client) is calculated on verified net earnings received from ad networks/sponsors on a monthly basis.</li>
+    <li>Applicable GST (18%) is itemized in the commercial table above.</li>
+    <li>Project timeline starts upon receipt of the advance payment and necessary initial design assets.</li>
+  </ul>
+
+  <!-- SIGNATURES -->
+  <div class="sign-row">
+    <div class="sign-block">
+      <div class="for">For JSP CODERS</div>
+      <div class="team-list">
+        <div><strong>JSP CODERS Development Team</strong></div>
+        <div>Technical Solutions &amp; Engineering</div>
+        <div><strong>Phone:</strong> +91 89552 26422 &nbsp;|&nbsp; <strong>Email:</strong> jspcoders@gmail.com</div>
+      </div>
+    </div>
+    <div class="sign-block" style="text-align:right;">
+      <div class="for">Accepted &amp; Confirmed By Client</div>
+      <div class="team-list" style="text-align:right;">
+        <div><strong>Padma Raj Keshri</strong></div>
+        <div><strong>Phone:</strong> +91 90369 39773</div>
+      </div>
+      <div class="sig-line" style="margin-left:auto;margin-top:8px;">Authorized Signatory</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-note">
+    JSP CODERS · Aadsar Bass, Ward No. 29, Shri Dungargarh, Bikaner, Rajasthan – 331803 · jspcoders@gmail.com · +91 89552 26422 · UDYAM-RJ-08-0136093
+  </div>
+
+</div>
+
+</body>
+</html>

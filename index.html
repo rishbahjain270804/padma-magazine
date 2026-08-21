@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PADMA RAJ KESHRI | Designer Publications & Portfolio</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          indigo: {
+            950: '#0c0e29',
+            900: '#141846',
+            800: '#1f2468',
+            700: '#2d358c',
+            600: '#434eb5',
+            500: '#5e6bd4',
+            100: '#eceeff',
+            50: '#f6f7ff',
+          },
+          luxury: {
+            gold: '#d4af37',
+            slate: '#64748b',
+            paper: '#faf9f6'
+          }
+        },
+        fontFamily: {
+          editorial: ['"Playfair Display"', 'serif'],
+          display: ['Cinzel', 'serif'],
+          sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+
+<!-- FontAwesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- StPageFlip (Realistic Flipbook Engine) -->
+<script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0c0e29; color: #f8fafc; overflow-x: hidden; }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #0c0e29; }
+  ::-webkit-scrollbar-thumb { background: #2d358c; border-radius: 3px; }
+
+  /* 3D Book Shadow Effect */
+  .book-card {
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    perspective: 1000px;
+  }
+  .book-card:hover {
+    transform: translateY(-8px) scale(1.02);
+  }
+  .book-cover-3d {
+    box-shadow: -10px 10px 25px rgba(0,0,0,0.6), -2px 2px 5px rgba(255,255,255,0.1) inset;
+    border-radius: 4px 10px 10px 4px;
+    position: relative;
+  }
+  .book-cover-3d::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0; width: 14px;
+    background: linear-gradient(to right, rgba(0,0,0,0.45) 0%, rgba(255,255,255,0.15) 35%, rgba(0,0,0,0.3) 100%);
+    border-radius: 4px 0 0 4px;
+    z-index: 10;
+  }
+
+  /* Flipbook Modal */
+  .flipbook-viewport {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .st-page-flip {
+    box-shadow: 0 25px 60px rgba(0,0,0,0.85);
+  }
+  .page {
+    background-color: #ffffff;
+    overflow: hidden;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.08);
+  }
+
+  /* Masonry Grid CSS */
+  .masonry-grid {
+    column-count: 3;
+    column-gap: 1.25rem;
+  }
+  @media (max-width: 1024px) { .masonry-grid { column-count: 2; } }
+  @media (max-width: 640px) { .masonry-grid { column-count: 1; } }
+  .masonry-item {
+    break-inside: avoid;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Glow accents */
+  .glow-indigo {
+    box-shadow: 0 0 40px rgba(94, 107, 212, 0.15);
+  }
+</style>
+</head>
+<body class="bg-indigo-950 text-slate-100 antialiased selection:bg-indigo-600 selection:text-white">
+
+  <!-- NAVBAR -->
+  <header class="fixed top-0 left-0 right-0 z-40 bg-indigo-950/80 backdrop-blur-md border-b border-indigo-900/60 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <a href="#" class="flex flex-col">
+        <span class="font-display tracking-[0.25em] text-lg font-bold text-white uppercase">PADMA RAJ KESHRI</span>
+        <span class="text-[10px] tracking-[0.3em] text-indigo-400 font-semibold uppercase">Fashion &amp; Spatial Design</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-widest text-slate-300">
+        <a href="#featured" class="hover:text-indigo-400 transition-colors">Featured</a>
+        <a href="#publications" class="hover:text-indigo-400 transition-colors">Magazine Shelf</a>
+        <a href="#gallery" class="hover:text-indigo-400 transition-colors">Runway Gallery</a>
+        <a href="#press" class="hover:text-indigo-400 transition-colors">Press &amp; News</a>
+        <a href="#about" class="hover:text-indigo-400 transition-colors">About</a>
+        <a href="#contact" class="hover:text-indigo-400 transition-colors">Contact</a>
+      </nav>
+
+      <div class="flex items-center space-x-4">
+        <a href="admin.html" class="hidden sm:inline-flex items-center space-x-2 text-xs font-semibold px-4 py-2 rounded-full border border-indigo-700 bg-indigo-900/40 text-indigo-200 hover:bg-indigo-800 transition-all">
+          <i class="fa-solid fa-lock text-[10px]"></i>
+          <span>Admin Portal</span>
+        </a>
+        <a href="https://wa.me/919036939773" target="_blank" class="inline-flex items-center space-x-2 text-xs font-bold px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/40 transition-all">
+          <i class="fa-brands fa-whatsapp text-sm"></i>
+          <span class="hidden sm:inline">WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="relative pt-36 pb-20 md:pt-44 md:pb-28 overflow-hidden">
+    <!-- Indigo Gradient Orbs -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-1/3 right-10 w-[400px] h-[400px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Headline -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-indigo-900/70 border border-indigo-700/50 text-indigo-300 text-xs font-medium tracking-wide">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Digital Publications Archive · 100+ Editions</span>
+          </div>
+
+          <h1 class="font-editorial text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white tracking-tight">
+            Curated Fashion Portfolios, Runway Editions &amp; Retail Archives.
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-300 font-light leading-relaxed max-w-2xl">
+            Explore high-resolution digital flipbooks and multimedia publications compiled from over a decade of high-fashion showcases, luxury retail installations, and academic masterclasses across NIFT &amp; NID.
+          </p>
+
+          <div class="pt-4 flex flex-wrap gap-4 items-center">
+            <button onclick="triggerBook('mag-1')" class="px-7 py-3.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm tracking-wider uppercase transition-all shadow-xl shadow-indigo-900/50 flex items-center space-x-3">
+              <i class="fa-solid fa-book-open"></i>
+              <span>Read Latest Edition</span>
+            </button>
+            <a href="#publications" class="px-6 py-3.5 rounded-lg bg-indigo-950 border border-indigo-800 hover:border-indigo-600 text-slate-200 font-semibold text-sm tracking-wider uppercase transition-all flex items-center space-x-2">
+              <i class="fa-solid fa-layer-group text-indigo-400"></i>
+              <span>Browse 100+ Editions</span>
+            </a>
+          </div>
+
+          <!-- Stats Bar -->
+          <div class="pt-8 border-t border-indigo-900/60 grid grid-cols-3 gap-6 max-w-lg">
+            <div>
+              <div class="text-2xl font-bold text-white font-editorial">100+</div>
+              <div class="text-xs text-slate-400 uppercase tracking-wider mt-0.5">PDF Magazines</div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold text-white font-editorial">300K+</div>
+              <div class="text-xs text-slate-400 uppercase tracking-wider mt-0.5">Monthly Views</div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold text-white font-editorial">200+</div>
+              <div class="text-xs text-slate-400 uppercase tracking-wider mt-0.5">NIFT/NID Groups</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 3D Featured Magazine Card -->
+        <div class="lg:col-span-5 flex justify-center" id="featured">
+          <div class="relative group cursor-pointer" onclick="triggerBook('mag-1')">
+            <div class="absolute -inset-1.5 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+            
+            <div class="relative bg-indigo-900/80 border border-indigo-700/60 p-6 rounded-xl space-y-4 max-w-sm">
+              <div class="relative overflow-hidden rounded-lg book-cover-3d aspect-[3/4] bg-slate-900 flex flex-col justify-between p-6 text-white" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a8a 100%);">
+                <div class="flex justify-between items-start z-20">
+                  <span class="text-[10px] font-bold tracking-[0.25em] uppercase text-indigo-300">SPECIAL EDITION</span>
+                  <span class="text-xs font-mono text-indigo-300">VOL. XXIV</span>
+                </div>
+                <div class="z-20 space-y-2">
+                  <p class="text-[11px] font-semibold tracking-widest text-indigo-200 uppercase">RUNWAY RETROSPECTIVE</p>
+                  <h3 class="font-editorial text-2xl font-bold leading-tight">HAUTE COUTURE &amp; TEXTILE ARCHIVES</h3>
+                  <p class="text-xs text-indigo-200/80 line-clamp-2">A compilation of avant-garde silhouette explorations and Indian handloom craftsmanship.</p>
+                </div>
+                <div class="z-20 flex justify-between items-center text-xs font-medium border-t border-indigo-400/30 pt-3 text-indigo-200">
+                  <span>Padma Raj Keshri</span>
+                  <span>48 Pages · PDF</span>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between pt-2">
+                <div>
+                  <h4 class="font-bold text-white text-sm">Haute Couture 2026</h4>
+                  <p class="text-xs text-slate-400">Published Aug 2026 · 48 Pages</p>
+                </div>
+                <span class="px-3 py-1.5 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center space-x-1.5 group-hover:bg-indigo-500 transition-colors">
+                  <i class="fa-solid fa-eye text-[10px]"></i>
+                  <span>Open 3D Reader</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MAGAZINE BOOKSHELF (ISSUU ALTERNATIVE) -->
+  <section id="publications" class="py-20 bg-indigo-900/30 border-t border-indigo-900/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div>
+          <span class="text-xs font-bold text-indigo-400 uppercase tracking-[0.25em]">Interactive Library</span>
+          <h2 class="font-editorial text-3xl sm:text-4xl font-bold text-white mt-1">Digital Magazine Shelf</h2>
+          <p class="text-sm text-slate-300 mt-2 max-w-xl">Realistic 3D flipbook reading experience on mobile, tablet, and desktop with zero subscription locks.</p>
+        </div>
+
+        <!-- Filter Tags -->
+        <div class="flex flex-wrap gap-2 text-xs font-semibold uppercase">
+          <button onclick="filterShelf('all')" class="shelf-btn active px-4 py-2 rounded-full bg-indigo-600 text-white transition-all">All Editions (100+)</button>
+          <button onclick="filterShelf('fashion')" class="shelf-btn px-4 py-2 rounded-full bg-indigo-950 border border-indigo-800 text-slate-300 hover:border-indigo-600 transition-all">Fashion Shows</button>
+          <button onclick="filterShelf('retail')" class="shelf-btn px-4 py-2 rounded-full bg-indigo-950 border border-indigo-800 text-slate-300 hover:border-indigo-600 transition-all">Retail Projects</button>
+          <button onclick="filterShelf('education')" class="shelf-btn px-4 py-2 rounded-full bg-indigo-950 border border-indigo-800 text-slate-300 hover:border-indigo-600 transition-all">NIFT &amp; NID</button>
+          <button onclick="filterShelf('press')" class="shelf-btn px-4 py-2 rounded-full bg-indigo-950 border border-indigo-800 text-slate-300 hover:border-indigo-600 transition-all">Monthly Press</button>
+        </div>
+      </div>
+
+      <!-- Bookshelf Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="shelfGrid">
+
+        <!-- Magazine Item 1 -->
+        <div class="book-card group cursor-pointer" data-category="fashion" onclick="triggerBook('mag-1')">
+          <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-xl p-4 flex flex-col justify-between h-full space-y-4 hover:border-indigo-500 transition-all">
+            <div class="relative book-cover-3d aspect-[3/4] bg-indigo-900 rounded-lg p-5 flex flex-col justify-between text-white overflow-hidden" style="background: linear-gradient(145deg, #1e1b4b, #2e1065);">
+              <div class="z-20 text-[9px] font-bold tracking-widest text-indigo-300">FASHION SHOW 2026</div>
+              <div class="z-20">
+                <h4 class="font-editorial text-lg font-bold">SILK &amp; GRACE RUNWAY</h4>
+                <p class="text-[11px] text-slate-300 mt-1">42 Pages · Spring Collection</p>
+              </div>
+              <div class="z-20 text-[10px] text-indigo-300 flex justify-between">
+                <span>Issue 08/26</span>
+                <span><i class="fa-solid fa-arrow-right"></i></span>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center justify-between text-xs text-indigo-400 font-semibold mb-1">
+                <span>Fashion Showcase</span>
+                <span class="text-slate-400">142K Views</span>
+              </div>
+              <h3 class="font-bold text-white text-base group-hover:text-indigo-300 transition-colors">Silk &amp; Grace Runway Edition</h3>
+              <p class="text-xs text-slate-400 mt-1 line-clamp-2">Complete runway collection, backstage styling, and moodboard concepts.</p>
+            </div>
+            <button class="w-full py-2.5 rounded-lg bg-indigo-900/60 hover:bg-indigo-600 border border-indigo-700/50 text-white font-semibold text-xs uppercase tracking-wider transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-book-open"></i>
+              <span>Open Flipbook</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Magazine Item 2 -->
+        <div class="book-card group cursor-pointer" data-category="retail" onclick="triggerBook('mag-2')">
+          <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-xl p-4 flex flex-col justify-between h-full space-y-4 hover:border-indigo-500 transition-all">
+            <div class="relative book-cover-3d aspect-[3/4] bg-indigo-900 rounded-lg p-5 flex flex-col justify-between text-white overflow-hidden" style="background: linear-gradient(145deg, #0f172a, #1e3a8a);">
+              <div class="z-20 text-[9px] font-bold tracking-widest text-sky-300">COMMERCIAL &amp; RETAIL</div>
+              <div class="z-20">
+                <h4 class="font-editorial text-lg font-bold">LUXURY STORE DESIGN</h4>
+                <p class="text-[11px] text-slate-300 mt-1">56 Pages · Architectural Spatial</p>
+              </div>
+              <div class="z-20 text-[10px] text-sky-300 flex justify-between">
+                <span>Retail Monograph</span>
+                <span><i class="fa-solid fa-arrow-right"></i></span>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center justify-between text-xs text-sky-400 font-semibold mb-1">
+                <span>Retail Spatial Design</span>
+                <span class="text-slate-400">98K Views</span>
+              </div>
+              <h3 class="font-bold text-white text-base group-hover:text-indigo-300 transition-colors">Luxury Boutique Interiors</h3>
+              <p class="text-xs text-slate-400 mt-1 line-clamp-2">Spatial architecture, experiential retail merchandising, and lighting systems.</p>
+            </div>
+            <button class="w-full py-2.5 rounded-lg bg-indigo-900/60 hover:bg-indigo-600 border border-indigo-700/50 text-white font-semibold text-xs uppercase tracking-wider transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-book-open"></i>
+              <span>Open Flipbook</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Magazine Item 3 -->
+        <div class="book-card group cursor-pointer" data-category="education" onclick="triggerBook('mag-3')">
+          <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-xl p-4 flex flex-col justify-between h-full space-y-4 hover:border-indigo-500 transition-all">
+            <div class="relative book-cover-3d aspect-[3/4] bg-indigo-900 rounded-lg p-5 flex flex-col justify-between text-white overflow-hidden" style="background: linear-gradient(145deg, #311042, #1e1b4b);">
+              <div class="z-20 text-[9px] font-bold tracking-widest text-pink-300">NIFT &amp; NID ACADEMIC</div>
+              <div class="z-20">
+                <h4 class="font-editorial text-lg font-bold">DRAPING &amp; PATTERN MASTERCLASS</h4>
+                <p class="text-[11px] text-slate-300 mt-1">64 Pages · Educational Curriculum</p>
+              </div>
+              <div class="z-20 text-[10px] text-pink-300 flex justify-between">
+                <span>Pedagogy Archive</span>
+                <span><i class="fa-solid fa-arrow-right"></i></span>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center justify-between text-xs text-pink-400 font-semibold mb-1">
+                <span>Design Education</span>
+                <span class="text-slate-400">210K Views</span>
+              </div>
+              <h3 class="font-bold text-white text-base group-hover:text-indigo-300 transition-colors">Advanced Draping Pedagogy</h3>
+              <p class="text-xs text-slate-400 mt-1 line-clamp-2">Masterclass notes, technical flat sketches, and fabric structural behavior studies.</p>
+            </div>
+            <button class="w-full py-2.5 rounded-lg bg-indigo-900/60 hover:bg-indigo-600 border border-indigo-700/50 text-white font-semibold text-xs uppercase tracking-wider transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-book-open"></i>
+              <span>Open Flipbook</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Magazine Item 4 -->
+        <div class="book-card group cursor-pointer" data-category="press" onclick="triggerBook('mag-4')">
+          <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-xl p-4 flex flex-col justify-between h-full space-y-4 hover:border-indigo-500 transition-all">
+            <div class="relative book-cover-3d aspect-[3/4] bg-indigo-900 rounded-lg p-5 flex flex-col justify-between text-white overflow-hidden" style="background: linear-gradient(145deg, #111827, #3730a3);">
+              <div class="z-20 text-[9px] font-bold tracking-widest text-emerald-300">PRESS &amp; TESTIMONIALS</div>
+              <div class="z-20">
+                <h4 class="font-editorial text-lg font-bold">MONTHLY PRESS CLIPPINGS</h4>
+                <p class="text-[11px] text-slate-300 mt-1">28 Pages · National Coverage</p>
+              </div>
+              <div class="z-20 text-[10px] text-emerald-300 flex justify-between">
+                <span>August 2026</span>
+                <span><i class="fa-solid fa-arrow-right"></i></span>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center justify-between text-xs text-emerald-400 font-semibold mb-1">
+                <span>Press &amp; Media</span>
+                <span class="text-slate-400">85K Views</span>
+              </div>
+              <h3 class="font-bold text-white text-base group-hover:text-indigo-300 transition-colors">National Press &amp; Awards 2026</h3>
+              <p class="text-xs text-slate-400 mt-1 line-clamp-2">Featured interviews, newspaper articles, and industry recognition highlights.</p>
+            </div>
+            <button class="w-full py-2.5 rounded-lg bg-indigo-900/60 hover:bg-indigo-600 border border-indigo-700/50 text-white font-semibold text-xs uppercase tracking-wider transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-book-open"></i>
+              <span>Open Flipbook</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PINTEREST-STYLE MASONRY RUNWAY & PROJECT GALLERY -->
+  <section id="gallery" class="py-20 border-t border-indigo-900/60 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-14 space-y-3">
+        <span class="text-xs font-bold text-indigo-400 uppercase tracking-[0.25em]">Visual Media Archive</span>
+        <h2 class="font-editorial text-3xl sm:text-4xl font-bold text-white">Pinterest-Style Runway Gallery</h2>
+        <p class="text-sm text-slate-300">High-resolution photography from backstage, runway collections, and retail design installations.</p>
+      </div>
+
+      <div class="masonry-grid" id="masonryGallery">
+        
+        <!-- Image Card 1 -->
+        <div class="masonry-item group relative overflow-hidden rounded-xl bg-indigo-900/60 border border-indigo-800/60 cursor-pointer" onclick="openLightbox('Runway Finale 2026', 'Silk draped ensemble with traditional zardozi accent', 'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop')">
+          <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop" alt="Fashion Runway" class="w-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-indigo-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end">
+            <span class="text-xs font-bold text-indigo-300 uppercase">Runway Showcase</span>
+            <h4 class="font-bold text-white text-lg">Silk Silhouette Finale</h4>
+            <p class="text-xs text-slate-300 mt-1">High-fashion runway presentation</p>
+          </div>
+        </div>
+
+        <!-- Image Card 2 -->
+        <div class="masonry-item group relative overflow-hidden rounded-xl bg-indigo-900/60 border border-indigo-800/60 cursor-pointer" onclick="openLightbox('Backstage Prep', 'Model fitting and textile texture details', 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop')">
+          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop" alt="Backstage" class="w-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-indigo-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end">
+            <span class="text-xs font-bold text-indigo-300 uppercase">Backstage</span>
+            <h4 class="font-bold text-white text-lg">Textile Mood &amp; Fitting</h4>
+            <p class="text-xs text-slate-300 mt-1">Pre-show artisanal styling</p>
+          </div>
+        </div>
+
+        <!-- Image Card 3 -->
+        <div class="masonry-item group relative overflow-hidden rounded-xl bg-indigo-900/60 border border-indigo-800/60 cursor-pointer" onclick="openLightbox('Retail Boutique Spatial', 'Flagship showroom conceptual installation', 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800&auto=format&fit=crop')">
+          <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800&auto=format&fit=crop" alt="Retail" class="w-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-indigo-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end">
+            <span class="text-xs font-bold text-indigo-300 uppercase">Retail Design</span>
+            <h4 class="font-bold text-white text-lg">Flagship Boutique Concept</h4>
+            <p class="text-xs text-slate-300 mt-1">Minimalist interior lighting &amp; displays</p>
+          </div>
+        </div>
+
+        <!-- Image Card 4 -->
+        <div class="masonry-item group relative overflow-hidden rounded-xl bg-indigo-900/60 border border-indigo-800/60 cursor-pointer" onclick="openLightbox('Pattern Drafting', 'Masterclass architectural geometry sketches', 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop')">
+          <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop" alt="Fashion details" class="w-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-indigo-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end">
+            <span class="text-xs font-bold text-indigo-300 uppercase">Education &amp; Craft</span>
+            <h4 class="font-bold text-white text-lg">Artisanal Tailoring</h4>
+            <p class="text-xs text-slate-300 mt-1">Precision draping technique study</p>
+          </div>
+        </div>
+
+        <!-- Image Card 5 -->
+        <div class="masonry-item group relative overflow-hidden rounded-xl bg-indigo-900/60 border border-indigo-800/60 cursor-pointer" onclick="openLightbox('Editorial Campaign', 'Outdoor fashion photography shoot', 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=800&auto=format&fit=crop')">
+          <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=800&auto=format&fit=crop" alt="Editorial" class="w-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-indigo-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end">
+            <span class="text-xs font-bold text-indigo-300 uppercase">Editorial Campaign</span>
+            <h4 class="font-bold text-white text-lg">Monochrome Drapery</h4>
+            <p class="text-xs text-slate-300 mt-1">Vogue India featured collaboration</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PRESS & BLOG SECTION -->
+  <section id="press" class="py-20 bg-indigo-900/30 border-t border-indigo-900/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+        <div>
+          <span class="text-xs font-bold text-indigo-400 uppercase tracking-[0.25em]">Media Coverage &amp; Articles</span>
+          <h2 class="font-editorial text-3xl sm:text-4xl font-bold text-white mt-1">Press, News &amp; Monthly Blogs</h2>
+        </div>
+        <a href="https://wa.me/919036939773" class="text-xs font-bold uppercase text-indigo-400 hover:text-indigo-300 flex items-center space-x-1">
+          <span>Press Inquiry</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-indigo-950 border border-indigo-800/60 rounded-xl p-6 space-y-4">
+          <span class="text-xs font-semibold text-indigo-400">The Hindu · August 2026</span>
+          <h3 class="font-editorial text-xl font-bold text-white">Reimagining Indian Handlooms for Global Contemporary Runways</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">An exploration of how traditional weaving clusters can adapt to sustainable luxury pret lines without losing artisanal soul.</p>
+          <a href="#" onclick="alert('Press article PDF opened')" class="inline-flex items-center space-x-1.5 text-xs font-bold text-indigo-400 hover:text-indigo-300">
+            <span>Read Clipping (PDF)</span>
+            <i class="fa-solid fa-file-pdf"></i>
+          </a>
+        </div>
+
+        <div class="bg-indigo-950 border border-indigo-800/60 rounded-xl p-6 space-y-4">
+          <span class="text-xs font-semibold text-indigo-400">Design India Quarterly · July 2026</span>
+          <h3 class="font-editorial text-xl font-bold text-white">Spatial Psychology in Next-Gen Luxury Retail Experiences</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">Why sensory lighting, material authenticity, and tactile architectural cues are winning physical retail over e-commerce.</p>
+          <a href="#" onclick="alert('Press article PDF opened')" class="inline-flex items-center space-x-1.5 text-xs font-bold text-indigo-400 hover:text-indigo-300">
+            <span>Read Clipping (PDF)</span>
+            <i class="fa-solid fa-file-pdf"></i>
+          </a>
+        </div>
+
+        <div class="bg-indigo-950 border border-indigo-800/60 rounded-xl p-6 space-y-4">
+          <span class="text-xs font-semibold text-indigo-400">NIFT Keynote · June 2026</span>
+          <h3 class="font-editorial text-xl font-bold text-white">The Future of Indian Fashion Design Curriculums &amp; Industry Alignment</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">Key highlights from the guest lecture delivered to graduating NIFT batches across Delhi, Mumbai, and Gandhinagar.</p>
+          <a href="#" onclick="alert('Press article PDF opened')" class="inline-flex items-center space-x-1.5 text-xs font-bold text-indigo-400 hover:text-indigo-300">
+            <span>Read Notes (PDF)</span>
+            <i class="fa-solid fa-file-pdf"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT & CONTACT -->
+  <section id="about" class="py-20 border-t border-indigo-900/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <div class="lg:col-span-5">
+          <div class="rounded-2xl overflow-hidden border border-indigo-800/80 shadow-2xl relative aspect-[4/5] bg-indigo-900">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop" alt="Padma Raj Keshri" class="w-full h-full object-cover object-top opacity-90">
+            <div class="absolute inset-0 bg-gradient-to-t from-indigo-950 via-transparent to-transparent"></div>
+            <div class="absolute bottom-6 left-6 right-6">
+              <h3 class="font-editorial text-2xl font-bold text-white">Padma Raj Keshri</h3>
+              <p class="text-xs text-indigo-300 font-semibold tracking-wider uppercase mt-1">Fashion Designer &amp; Spatial Architect</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 space-y-6" id="contact">
+          <span class="text-xs font-bold text-indigo-400 uppercase tracking-[0.25em]">About the Designer</span>
+          <h2 class="font-editorial text-3xl sm:text-4xl font-bold text-white">Bridging Couture Craft with Architectural Precision</h2>
+          <p class="text-sm sm:text-base text-slate-300 leading-relaxed font-light">
+            With over a decade of multifaceted experience spanning high-fashion couture collections, bespoke commercial interiors, and design mentorship at premier institutions including NIFT and NID, Padma Raj Keshri operates at the intersection of textiles, human form, and spatial storytelling.
+          </p>
+
+          <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <a href="https://wa.me/919036939773" target="_blank" class="p-4 rounded-xl bg-indigo-900/50 border border-indigo-800 hover:border-emerald-500 transition-all flex items-center space-x-4">
+              <div class="w-10 h-10 rounded-full bg-emerald-600/20 text-emerald-400 flex items-center justify-center text-lg">
+                <i class="fa-brands fa-whatsapp"></i>
+              </div>
+              <div>
+                <div class="text-xs text-slate-400 uppercase tracking-wider">Direct WhatsApp</div>
+                <div class="text-sm font-bold text-white">+91 90369 39773</div>
+              </div>
+            </a>
+
+            <div class="p-4 rounded-xl bg-indigo-900/50 border border-indigo-800 flex items-center space-x-4">
+              <div class="w-10 h-10 rounded-full bg-indigo-600/20 text-indigo-400 flex items-center justify-center text-lg">
+                <i class="fa-solid fa-envelope"></i>
+              </div>
+              <div>
+                <div class="text-xs text-slate-400 uppercase tracking-wider">Inquiries</div>
+                <div class="text-sm font-bold text-white">studio@padmarajkeshri.org</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 flex items-center space-x-4 text-slate-400">
+            <span class="text-xs uppercase font-bold text-slate-400 tracking-wider">Connect:</span>
+            <a href="#" class="w-9 h-9 rounded-full bg-indigo-900/60 border border-indigo-800 hover:bg-indigo-600 hover:text-white flex items-center justify-center transition-all"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="w-9 h-9 rounded-full bg-indigo-900/60 border border-indigo-800 hover:bg-indigo-600 hover:text-white flex items-center justify-center transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#" class="w-9 h-9 rounded-full bg-indigo-900/60 border border-indigo-800 hover:bg-indigo-600 hover:text-white flex items-center justify-center transition-all"><i class="fa-brands fa-pinterest-p"></i></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-10 bg-indigo-950 border-t border-indigo-900/80 text-center text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 space-y-2">
+      <p class="font-display tracking-widest text-white text-sm">PADMA RAJ KESHRI</p>
+      <p>© 2026 Padma Raj Keshri. All Rights Reserved · Self-Hosted Publications Archive Platform</p>
+      <p class="text-[10px] text-slate-400">Platform Engineered &amp; Maintained by <a href="#" class="text-indigo-400 font-semibold hover:underline">JSP CODERS</a></p>
+    </div>
+  </footer>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. GATED ACCESS LEAD CAPTURE MODAL -->
+  <div id="leadModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-indigo-950 border border-indigo-700/80 rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative space-y-6">
+      
+      <button onclick="closeLeadModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="text-center space-y-2">
+        <div class="w-12 h-12 rounded-full bg-indigo-600/20 text-indigo-400 flex items-center justify-center mx-auto text-xl">
+          <i class="fa-solid fa-book-open-reader"></i>
+        </div>
+        <h3 class="font-editorial text-2xl font-bold text-white">Access Full Publication</h3>
+        <p class="text-xs text-slate-300">Please enter your details to unlock high-resolution flipbook viewing.</p>
+      </div>
+
+      <form id="leadForm" onsubmit="submitLead(event)" class="space-y-4 text-left">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">Full Name</label>
+          <input type="text" id="leadName" required placeholder="e.g. Ananya Sharma" class="w-full px-3.5 py-2.5 rounded-lg bg-indigo-900/60 border border-indigo-700 text-white placeholder-slate-400 text-xs focus:outline-none focus:border-indigo-400">
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">Email Address</label>
+          <input type="email" id="leadEmail" required placeholder="e.g. ananya@nift.ac.in" class="w-full px-3.5 py-2.5 rounded-lg bg-indigo-900/60 border border-indigo-700 text-white placeholder-slate-400 text-xs focus:outline-none focus:border-indigo-400">
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">WhatsApp / Phone Number</label>
+          <input type="tel" id="leadPhone" required placeholder="e.g. +91 98765 43210" class="w-full px-3.5 py-2.5 rounded-lg bg-indigo-900/60 border border-indigo-700 text-white placeholder-slate-400 text-xs focus:outline-none focus:border-indigo-400">
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">Your Affiliation / Purpose</label>
+          <select id="leadPurpose" class="w-full px-3.5 py-2.5 rounded-lg bg-indigo-900/60 border border-indigo-700 text-white text-xs focus:outline-none focus:border-indigo-400">
+            <option value="student">NIFT / NID Design Student</option>
+            <option value="educator">Design Educator / Academician</option>
+            <option value="brand">Fashion Brand / Commercial Client</option>
+            <option value="press">Press &amp; Media Reporter</option>
+            <option value="other">Other Design Enthusiast</option>
+          </select>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-indigo-900/50 flex items-center justify-center space-x-2">
+          <span>Unlock &amp; Read Magazine</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+        <p class="text-[10px] text-center text-slate-400">Your details are directly shared with Padma Raj Keshri Studio.</p>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- 2. INTERACTIVE 3D FLIPBOOK VIEWER MODAL -->
+  <div id="flipbookModal" class="fixed inset-0 z-50 bg-black/95 hidden flex flex-col">
+    <!-- Top Viewer Controls -->
+    <div class="h-16 bg-indigo-950/90 border-b border-indigo-900 px-6 flex items-center justify-between text-white flex-shrink-0">
+      <div class="flex items-center space-x-3">
+        <span class="font-display font-bold text-sm tracking-wider" id="viewerBookTitle">Silk &amp; Grace Runway Edition</span>
+        <span class="text-xs px-2.5 py-0.5 rounded bg-indigo-800 text-indigo-200">Padma Raj Keshri</span>
+      </div>
+
+      <div class="flex items-center space-x-4 text-sm">
+        <button onclick="flipPrev()" class="px-3 py-1.5 rounded bg-indigo-900 hover:bg-indigo-800 text-xs font-semibold flex items-center space-x-1.5">
+          <i class="fa-solid fa-chevron-left"></i>
+          <span>Previous</span>
+        </button>
+        <span class="text-xs text-slate-300 font-mono" id="pageIndicator">Page 1 / 6</span>
+        <button onclick="flipNext()" class="px-3 py-1.5 rounded bg-indigo-900 hover:bg-indigo-800 text-xs font-semibold flex items-center space-x-1.5">
+          <span>Next</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <button onclick="closeFlipbook()" class="w-8 h-8 rounded-full bg-red-900/40 text-red-300 hover:bg-red-800/80 flex items-center justify-center ml-4">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Viewer Body -->
+    <div class="flex-1 flex items-center justify-center p-4 sm:p-8 overflow-hidden">
+      <div id="flipbookContainer" class="flipbook-viewport">
+        <!-- Flipbook HTML Pages -->
+        <div id="magazineFlipbook" class="st-page-flip">
+          
+          <!-- Page 1 (Cover) -->
+          <div class="page p-8 flex flex-col justify-between text-indigo-950" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+            <div class="border-b-2 border-indigo-950 pb-4 flex justify-between items-end">
+              <span class="font-display font-bold text-sm tracking-widest uppercase">PADMA RAJ KESHRI</span>
+              <span class="text-[10px] font-mono font-bold text-slate-600">VOL. XXIV</span>
+            </div>
+            <div class="my-auto text-center space-y-4 py-8">
+              <span class="text-xs font-bold uppercase tracking-[0.3em] text-indigo-600">Spring Couture Collection</span>
+              <h1 class="font-editorial text-4xl font-bold leading-tight">SILK &amp; GRACE</h1>
+              <p class="text-xs text-slate-600 max-w-xs mx-auto">An archival exploration of Indian handlooms, structural draping, and contemporary silhouettes.</p>
+            </div>
+            <div class="border-t border-slate-300 pt-3 text-[10px] text-slate-500 flex justify-between">
+              <span>National Fashion Week</span>
+              <span>Self-Hosted Issuu Alternative</span>
+            </div>
+          </div>
+
+          <!-- Page 2 -->
+          <div class="page p-8 flex flex-col justify-between text-slate-800 bg-white">
+            <div class="text-[10px] font-mono text-slate-400 border-b pb-2 flex justify-between">
+              <span>02 · Editorial Foreword</span>
+              <span>SILK &amp; GRACE</span>
+            </div>
+            <div class="space-y-4 my-auto">
+              <h2 class="font-editorial text-2xl font-bold text-indigo-950">The Vision of Craft Continuity</h2>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                "Indian textile heritage is not an artifact of the past; it is a dynamic, living geometry. When we translate Banarasi silks and raw Tussar into architectural silhouettes, we bridge centuries of artisanal mastery with contemporary global luxury."
+              </p>
+              <div class="p-4 bg-indigo-50 border-l-4 border-indigo-600 rounded text-xs text-indigo-900 font-medium italic">
+                — Padma Raj Keshri, Fashion Showcase Notes
+              </div>
+            </div>
+            <div class="text-[10px] text-slate-400 text-right">Page 2</div>
+          </div>
+
+          <!-- Page 3 -->
+          <div class="page p-6 flex flex-col justify-between bg-slate-900 text-white">
+            <div class="relative h-full w-full rounded overflow-hidden flex flex-col justify-end p-6" style="background: url('https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop') center/cover;">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+              <div class="relative z-10 space-y-1">
+                <span class="text-[9px] font-bold uppercase tracking-widest text-indigo-300">Lookbook Plate 01</span>
+                <h3 class="font-editorial text-xl font-bold">Midnight Indigo Zari Gown</h3>
+                <p class="text-[11px] text-slate-300">Hand-spun mulberry silk with hand-beaded metal thread detailing.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Page 4 -->
+          <div class="page p-8 flex flex-col justify-between text-slate-800 bg-white">
+            <div class="text-[10px] font-mono text-slate-400 border-b pb-2 flex justify-between">
+              <span>04 · Textile Matrix</span>
+              <span>SILK &amp; GRACE</span>
+            </div>
+            <div class="space-y-4 my-auto">
+              <h3 class="font-editorial text-xl font-bold text-indigo-950">Textile Matrix &amp; Construction</h3>
+              <div class="space-y-2 text-xs text-slate-600">
+                <div class="p-2.5 bg-slate-50 rounded border border-slate-200">
+                  <strong class="text-indigo-950 block">Primary Fabric:</strong> 100% Handwoven Bhagalpuri Silk
+                </div>
+                <div class="p-2.5 bg-slate-50 rounded border border-slate-200">
+                  <strong class="text-indigo-950 block">Draping Technique:</strong> Bias-cut spiral flare with internal corset boning
+                </div>
+                <div class="p-2.5 bg-slate-50 rounded border border-slate-200">
+                  <strong class="text-indigo-950 block">Artisan Network:</strong> 14 Master weavers across Bihar &amp; Bengal clusters
+                </div>
+              </div>
+            </div>
+            <div class="text-[10px] text-slate-400 text-right">Page 4</div>
+          </div>
+
+          <!-- Page 5 (Ad Sponsor Mock - 60/40 Revenue Sharing) -->
+          <div class="page p-6 flex flex-col justify-between bg-indigo-900 text-white" style="background: linear-gradient(135deg, #1e1b4b, #312e81);">
+            <div class="border border-indigo-400/40 rounded-lg p-6 h-full flex flex-col justify-between text-center">
+              <span class="text-[9px] font-bold uppercase tracking-[0.25em] text-indigo-300">FEATURED SPONSOR / AD PARTNER</span>
+              <div class="space-y-3 my-auto">
+                <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mx-auto text-xl text-yellow-400">
+                  <i class="fa-solid fa-gem"></i>
+                </div>
+                <h3 class="font-editorial text-2xl font-bold">PREMIER TEXTILE GUILD</h3>
+                <p class="text-xs text-indigo-200">Suppliers of fine organic silks, handloom brocades &amp; designer accessories for NIFT/NID designers.</p>
+                <div class="inline-block px-4 py-1.5 rounded-full bg-white text-indigo-950 text-[10px] font-bold uppercase tracking-wider">
+                  Partner Promotion
+                </div>
+              </div>
+              <p class="text-[9px] text-indigo-300/80">Monetized via JSP CODERS Ad Engine (60/40 Split)</p>
+            </div>
+          </div>
+
+          <!-- Page 6 (Back Cover) -->
+          <div class="page p-8 flex flex-col justify-between text-white" style="background: linear-gradient(135deg, #0c0e29, #141846);">
+            <div class="text-center space-y-3 my-auto">
+              <span class="font-display text-xl font-bold tracking-[0.25em]">PADMA RAJ KESHRI</span>
+              <p class="text-xs text-slate-300">Designer Publications &amp; Fashion Archive</p>
+              <div class="pt-4 text-[11px] text-indigo-300 space-y-1 font-mono">
+                <div>studio@padmarajkeshri.org</div>
+                <div>WhatsApp: +91 90369 39773</div>
+              </div>
+            </div>
+            <div class="text-center text-[10px] text-slate-500">
+              Edition 2026 · End of Publication
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. LIGHTBOX MODAL -->
+  <div id="lightboxModal" class="fixed inset-0 z-50 bg-black/95 hidden flex items-center justify-center p-4" onclick="closeLightbox()">
+    <div class="max-w-4xl w-full bg-indigo-950 border border-indigo-800 rounded-xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+      <div class="relative aspect-[16/10] bg-black">
+        <img id="lightboxImg" src="" alt="Gallery Preview" class="w-full h-full object-contain">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/60 text-white hover:bg-black flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-6 bg-indigo-950">
+        <h4 class="font-editorial text-xl font-bold text-white" id="lightboxTitle">Title</h4>
+        <p class="text-xs text-slate-300 mt-1" id="lightboxDesc">Description</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <script>
+    var currentBookId = null;
+    var pageFlipInstance = null;
+    var hasUnlocked = localStorage.getItem("padma_lead_unlocked") === "true";
+
+    function triggerBook(bookId) {
+      currentBookId = bookId;
+      if (hasUnlocked) {
+        openFlipbook();
+      } else {
+        openLeadModal();
+      }
+    }
+
+    function openLeadModal() {
+      document.getElementById("leadModal").classList.remove("hidden");
+    }
+
+    function closeLeadModal() {
+      document.getElementById("leadModal").classList.add("hidden");
+    }
+
+    function submitLead(e) {
+      e.preventDefault();
+      var name = document.getElementById("leadName").value;
+      var email = document.getElementById("leadEmail").value;
+      var phone = document.getElementById("leadPhone").value;
+      var purpose = document.getElementById("leadPurpose").value;
+
+      var leads = JSON.parse(localStorage.getItem("padma_leads") || "[]");
+      leads.push({ name: name, email: email, phone: phone, purpose: purpose, timestamp: new Date().toISOString() });
+      localStorage.setItem("padma_leads", JSON.stringify(leads));
+      localStorage.setItem("padma_lead_unlocked", "true");
+      hasUnlocked = true;
+
+      closeLeadModal();
+      openFlipbook();
+    }
+
+    function openFlipbook() {
+      var modal = document.getElementById("flipbookModal");
+      modal.classList.remove("hidden");
+
+      setTimeout(function() {
+        if (!pageFlipInstance) {
+          var el = document.getElementById("magazineFlipbook");
+          pageFlipInstance = new St.PageFlip(el, {
+            width: 460,
+            height: 620,
+            size: "stretch",
+            minWidth: 320,
+            maxWidth: 600,
+            minHeight: 440,
+            maxHeight: 800,
+            maxShadowOpacity: 0.5,
+            showCover: true,
+            mobileScrollSupport: true
+          });
+          pageFlipInstance.loadFromHTML(document.querySelectorAll(".page"));
+          pageFlipInstance.on("flip", function(e) {
+            document.getElementById("pageIndicator").textContent = "Page " + (e.data + 1) + " / " + pageFlipInstance.getPageCount();
+          });
+        }
+      }, 100);
+    }
+
+    function closeFlipbook() {
+      document.getElementById("flipbookModal").classList.add("hidden");
+    }
+
+    function flipPrev() {
+      if (pageFlipInstance) pageFlipInstance.flipPrev();
+    }
+
+    function flipNext() {
+      if (pageFlipInstance) pageFlipInstance.flipNext();
+    }
+
+    function filterShelf(cat) {
+      document.querySelectorAll(".shelf-btn").forEach(function(btn) {
+        btn.classList.remove("bg-indigo-600", "text-white");
+        btn.classList.add("bg-indigo-950", "text-slate-300");
+      });
+      event.target.classList.add("bg-indigo-600", "text-white");
+      event.target.classList.remove("bg-indigo-950", "text-slate-300");
+
+      document.querySelectorAll("#shelfGrid .book-card").forEach(function(card) {
+        if (cat === "all" || card.getAttribute("data-category") === cat) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    function openLightbox(title, desc, src) {
+      document.getElementById("lightboxTitle").textContent = title;
+      document.getElementById("lightboxDesc").textContent = desc;
+      document.getElementById("lightboxImg").src = src;
+      document.getElementById("lightboxModal").classList.remove("hidden");
+    }
+
+    function closeLightbox() {
+      document.getElementById("lightboxModal").classList.add("hidden");
+    }
+  </script>
+</body>
+</html>

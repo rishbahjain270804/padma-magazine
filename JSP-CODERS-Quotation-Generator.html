@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quotation Generator - JSP CODERS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
+  body { background: #eef0f2; color: #1e2530; }
+
+  .app { display: flex; height: 100vh; }
+
+  /* ============ EDITOR (left) ============ */
+  .editor {
+    width: 380px;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 1px solid #dfe3e8;
+    overflow-y: auto;
+    padding: 16px 16px 60px;
+  }
+  .editor h1 { font-size: 15px; margin: 0 0 4px; color: #c0392b; }
+  .editor .sub { font-size: 11px; color: #6b7280; margin-bottom: 14px; }
+  .grp { border: 1px solid #e5e7eb; border-radius: 6px; margin-bottom: 10px; overflow: hidden; }
+  .grp > summary { cursor: pointer; font-size: 12px; font-weight: 700; padding: 8px 10px; background: #f7f7f8; color: #374151; list-style: none; }
+  .grp > summary::-webkit-details-marker { display: none; }
+  .grp > summary:before { content: "▸ "; color: #c0392b; }
+  .grp[open] > summary:before { content: "▾ "; }
+  .grp-body { padding: 10px; }
+  label { display: block; font-size: 10.5px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.3px; margin: 8px 0 3px; }
+  label:first-child { margin-top: 0; }
+  label.lbl-row { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  label.lbl-row input[type=checkbox] { width: auto; margin: 0; accent-color: #c0392b; cursor: pointer; }
+  label.lbl-row.section-toggle { font-size: 11.5px; color: #374151; margin: 0 0 8px; padding-bottom: 8px; border-bottom: 1px dashed #e5e7eb; }
+  .dimmed-hint { font-size: 10px; color: #9aa0a6; font-weight: 400; text-transform: none; margin-left: 4px; }
+  input[type=text], input[type=number], input[type=date], textarea, select {
+    width: 100%; padding: 6px 8px; font-size: 12.5px; border: 1px solid #d7dade; border-radius: 4px;
+    font-family: inherit; color: #1e2530; background: #fff;
+  }
+  textarea { resize: vertical; min-height: 54px; line-height: 1.4; }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: #c0392b; }
+  .row2 { display: flex; gap: 6px; }
+  .row2 > div { flex: 1; }
+  .block-card { border: 1px solid #e5e7eb; border-radius: 5px; padding: 8px; margin-bottom: 8px; background: #fafafa; }
+  .block-card-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .block-card-hd span { font-size: 10.5px; font-weight: 700; color: #374151; }
+  .mini-btn {
+    border: none; background: #fce8e6; color: #c0392b; font-size: 10.5px; font-weight: 700;
+    padding: 3px 7px; border-radius: 4px; cursor: pointer;
+  }
+  .mini-btn:hover { background: #f8d0cc; }
+  .add-btn {
+    width: 100%; margin-top: 4px; padding: 6px; border: 1px dashed #c0392b; background: #fff;
+    color: #c0392b; font-size: 11.5px; font-weight: 700; border-radius: 5px; cursor: pointer;
+  }
+  .add-btn:hover { background: #fdf2f1; }
+  .milestone-row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
+  .milestone-row input[type=text] { flex: 2; }
+  .milestone-row input[type=number] { flex: 0 0 54px; }
+  .milestone-amt { flex: 0 0 74px; font-size: 11px; color: #6b7280; text-align: right; }
+  .pct-sum { font-size: 11px; margin-top: 4px; font-weight: 700; }
+  .pct-sum.ok { color: #16a34a; }
+  .pct-sum.warn { color: #c0392b; }
+  .logo-preview { width: 44px; height: 44px; object-fit: contain; border: 1px solid #e5e7eb; border-radius: 4px; padding: 2px; background: #fff; }
+  .logo-row { display: flex; align-items: center; gap: 8px; }
+  .top-actions { display: flex; gap: 6px; margin-bottom: 12px; }
+  .top-actions button {
+    flex: 1; padding: 8px 6px; font-size: 11px; font-weight: 700; border-radius: 5px; cursor: pointer; border: 1px solid #d7dade; background: #fff;
+  }
+  .top-actions button.primary { background: #c0392b; color: #fff; border-color: #c0392b; }
+  .top-actions button:hover { filter: brightness(0.96); }
+
+  /* ============ PREVIEW (right) ============ */
+  .preview-pane { flex: 1; overflow-y: auto; padding: 24px; }
+  .toolbar { max-width: 800px; margin: 0 auto 12px; display: flex; justify-content: flex-end; }
+  .toolbar button {
+    padding: 9px 16px; font-size: 12.5px; font-weight: 700; border-radius: 6px; border: none;
+    background: #1e2530; color: #fff; cursor: pointer;
+  }
+  .toolbar button:hover { background: #30394a; }
+
+  .sheet {
+    max-width: 800px; margin: 0 auto; background: #fff; padding: 44px 48px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08); font-size: 13.5px; line-height: 1.55; color: #1e2530;
+  }
+  .letterhead { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #c0392b; padding-bottom: 16px; margin-bottom: 24px; }
+  .brand-name { font-family: 'Poppins','Segoe UI',Arial,sans-serif; font-size: 26px; font-weight: 800; letter-spacing: 0.5px; color: #c0392b; margin: 0; }
+  .brand-tag { font-size: 10.5px; color: #6b7280; margin-top: 2px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .brand-contact { text-align: right; font-size: 12px; color: #444; }
+  .brand-contact div { margin-bottom: 2px; }
+  .doc-title-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; }
+  .doc-title { font-family: 'Poppins','Segoe UI',Arial,sans-serif; font-size: 19px; font-weight: 700; letter-spacing: 1px; }
+  .doc-meta { font-size: 12px; color: #6b7280; text-align: right; }
+  .parties { display: flex; justify-content: space-between; gap: 24px; margin-bottom: 22px; }
+  .party-block { flex: 1; }
+  .party-label { font-size: 10.5px; font-weight: 700; color: #c0392b; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; }
+  .party-name { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+  .party-addr { color: #444; font-size: 12.5px; white-space: pre-line; }
+  h2.section { font-family: 'Poppins','Segoe UI',Arial,sans-serif; font-size: 13.5px; text-transform: uppercase; letter-spacing: 0.6px; color: #c0392b; border-bottom: 1px solid #e5e7eb; padding-bottom: 5px; margin: 26px 0 10px; }
+  .scope-block { border: 1px solid #e5e7eb; border-left: 4px solid #c0392b; border-radius: 4px; background: #fcfcfc; padding: 10px 16px 12px; margin-bottom: 10px; }
+  .scope-title { font-family: 'Poppins','Segoe UI',Arial,sans-serif; font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+  ul.scope-sub { margin: 0; padding-left: 20px; font-size: 12.5px; color: #444; }
+  ul.scope-sub li { margin-bottom: 4px; }
+  table.pay { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+  table.pay th, table.pay td { border: 1px solid #e0e2e6; padding: 8px 10px; text-align: left; }
+  table.pay th { background: #faf4f3; color: #7a2318; font-weight: 700; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px; }
+  table.pay td.amt, table.pay th.amt { text-align: right; white-space: nowrap; }
+  table.pay tr.total td { font-weight: 700; background: #fbfbfb; }
+  .total-banner { display: flex; justify-content: space-between; align-items: center; background: #1e2530; color: #fff; padding: 14px 18px; border-radius: 6px; margin-top: 10px; }
+  .total-banner .label { font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.5px; color: #d1d5db; }
+  .total-banner .value { font-family: 'Poppins','Segoe UI',Arial,sans-serif; font-size: 22px; font-weight: 800; }
+  .support-grid { display: flex; gap: 10px; margin-top: 6px; }
+  .support-card { flex: 1; border: 1px solid #e5e7eb; border-left: 3px solid #c0392b; padding: 8px 11px; border-radius: 4px; background: #fcfcfc; }
+  .support-card .card-title { font-weight: 700; font-size: 11.5px; margin-bottom: 2px; }
+  .support-card div { font-size: 11px; }
+  .support-card .card-note { font-size: 10px; color: #6b7280; margin-top: 3px; }
+  .timeline-box { display: flex; align-items: baseline; gap: 8px; background: #faf4f3; border-radius: 5px; padding: 7px 12px; margin-top: 6px; font-size: 11px; }
+  .timeline-box .big { font-family: 'Poppins','Segoe UI',Arial,sans-serif; font-size: 14px; font-weight: 800; color: #c0392b; white-space: nowrap; }
+  ul.terms { margin: 0; padding-left: 20px; font-size: 12px; color: #444; }
+  ul.terms li { margin-bottom: 5px; }
+  .sign-row { display: flex; justify-content: space-between; margin-top: 34px; padding-top: 18px; border-top: 1px solid #e5e7eb; }
+  .sign-block { font-size: 12.5px; }
+  .sign-block .for { font-size: 11px; color: #6b7280; margin-bottom: 22px; }
+  .sig-line { margin-top: 36px; }
+  .team-list { font-size: 11.5px; color: #444; margin-top: 6px; }
+  .team-list div { margin-bottom: 2px; }
+  .footer-note { text-align: center; font-size: 10.5px; color: #9aa0a6; margin-top: 30px; border-top: 1px solid #eee; padding-top: 12px; }
+
+  @media print {
+    .editor, .toolbar { display: none !important; }
+    .app { display: block; height: auto; }
+    .preview-pane { padding: 0; overflow: visible; }
+    body { background: #fff; font-size: 12.5px; }
+    .sheet { box-shadow: none; padding: 0; max-width: 100%; margin: 0; line-height: 1.35; }
+    @page { size: A4; margin: 12mm 14mm; }
+
+    /* Condensed spacing so the doc fits in 2 pages instead of spilling a near-empty 3rd */
+    .sheet p { margin: 5px 0; }
+    h2.section { margin: 14px 0 6px; padding-bottom: 3px; }
+    .scope-block { padding: 6px 12px 7px; margin-bottom: 6px; }
+    .scope-title { margin-bottom: 2px; }
+    ul.scope-sub li { margin-bottom: 2px; }
+    .total-banner { padding: 9px 16px; margin-top: 6px; }
+    table.pay { margin-top: 5px; }
+    table.pay th, table.pay td { padding: 5px 9px; }
+    .support-grid { margin-top: 4px; gap: 8px; }
+    .support-card { padding: 6px 9px; }
+    .timeline-box { padding: 5px 10px; margin-top: 4px; }
+    ul.terms { margin-top: 2px; }
+    ul.terms li { margin-bottom: 2px; }
+    .sign-row { margin-top: 16px; padding-top: 8px; }
+    .sign-block .for { margin-bottom: 10px; }
+    .sig-line { margin-top: 20px; }
+    .footer-note { margin-top: 12px; padding-top: 6px; font-size: 9.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ======================= EDITOR ======================= -->
+  <aside class="editor no-print">
+    <h1>Quotation Generator</h1>
+    <div class="sub">Fill in details on the left — the document on the right updates live. Hit Print when ready.</div>
+
+    <div class="top-actions">
+      <button id="btnReset" title="Clear everything and start a brand-new quotation">New / Reset</button>
+      <button id="btnPrint" class="primary">Print / Save PDF</button>
+    </div>
+
+    <details class="grp" open>
+      <summary>Your Company (From)</summary>
+      <div class="grp-body">
+        <div class="logo-row">
+          <img id="logoPreview" class="logo-preview" src="" alt="logo">
+          <input type="file" id="logoFile" accept="image/*" style="flex:1;font-size:11px;">
+        </div>
+        <label>Company Name</label>
+        <input type="text" id="companyName">
+        <label class="lbl-row"><input type="checkbox" id="vis_companyTag" checked> Tagline</label>
+        <input type="text" id="companyTag">
+        <label>Address Line 1</label>
+        <input type="text" id="companyAddr1">
+        <label class="lbl-row"><input type="checkbox" id="vis_companyAddr2" checked> Address Line 2</label>
+        <input type="text" id="companyAddr2">
+        <div class="row2">
+          <div><label>Email</label><input type="text" id="companyEmail"></div>
+          <div><label>Phone</label><input type="text" id="companyPhone"></div>
+        </div>
+        <label class="lbl-row"><input type="checkbox" id="vis_companyReg" checked> Registration No.</label>
+        <input type="text" id="companyReg">
+      </div>
+    </details>
+
+    <details class="grp" open>
+      <summary>Quotation Info</summary>
+      <div class="grp-body">
+        <div class="row2">
+          <div><label>Quotation No.</label><input type="text" id="qtnNo"></div>
+          <div><label>Date</label><input type="date" id="qtnDate"></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="grp" open>
+      <summary>Client (To)</summary>
+      <div class="grp-body">
+        <label>Client Name</label>
+        <input type="text" id="clientName">
+        <label>Client Address (one line each)</label>
+        <textarea id="clientAddr"></textarea>
+      </div>
+    </details>
+
+    <details class="grp">
+      <summary>Introduction</summary>
+      <div class="grp-body">
+        <label class="lbl-row"><input type="checkbox" id="vis_intro" checked> Show opening paragraph</label>
+        <textarea id="intro" style="min-height:80px;"></textarea>
+      </div>
+    </details>
+
+    <details class="grp" open>
+      <summary>Scope of Work</summary>
+      <div class="grp-body">
+        <label class="lbl-row section-toggle"><input type="checkbox" id="vis_scopeSection" checked> Show this section in the document</label>
+        <div id="scopeEditorList"></div>
+        <button class="add-btn" id="btnAddScope">+ Add Section</button>
+        <label class="lbl-row" style="margin-top:10px;"><input type="checkbox" id="vis_scopeNote" checked> Footnote (small gray note)</label>
+        <textarea id="scopeNote" style="min-height:44px;"></textarea>
+      </div>
+    </details>
+
+    <details class="grp" open>
+      <summary>Commercial Terms</summary>
+      <div class="grp-body">
+        <label>Total Project Cost (₹)</label>
+        <input type="number" id="total" min="0" step="1">
+      </div>
+    </details>
+
+    <details class="grp" open>
+      <summary>Payment Schedule</summary>
+      <div class="grp-body">
+        <div id="milestoneEditorList"></div>
+        <button class="add-btn" id="btnAddMilestone">+ Add Milestone</button>
+        <div class="pct-sum" id="pctSum"></div>
+      </div>
+    </details>
+
+    <details class="grp">
+      <summary>Project Timeline</summary>
+      <div class="grp-body">
+        <label class="lbl-row section-toggle"><input type="checkbox" id="vis_timelineSection" checked> Show this section in the document</label>
+        <div class="row2">
+          <div><label>Value</label><input type="text" id="timelineValue"></div>
+          <div><label>Unit</label>
+            <select id="timelineUnit">
+              <option>Month</option><option>Months</option><option>Week</option><option>Weeks</option><option>Day</option><option>Days</option>
+            </select>
+          </div>
+        </div>
+        <label class="lbl-row"><input type="checkbox" id="vis_timelineNote" checked> Note</label>
+        <textarea id="timelineNote" style="min-height:44px;"></textarea>
+      </div>
+    </details>
+
+    <details class="grp">
+      <summary>Post-Delivery Support</summary>
+      <div class="grp-body">
+        <label class="lbl-row section-toggle"><input type="checkbox" id="vis_supportSection" checked> Show this section in the document</label>
+
+        <label class="lbl-row"><input type="checkbox" id="vis_maintCard" checked> Show Free Maintenance card</label>
+        <label>Free Maintenance — Duration</label>
+        <input type="text" id="maintDuration">
+        <label>Maintenance — Description</label>
+        <textarea id="maintBody" style="min-height:40px;"></textarea>
+        <label class="lbl-row"><input type="checkbox" id="vis_maintNote" checked> Maintenance — Note (small gray)</label>
+        <textarea id="maintNote" style="min-height:40px;"></textarea>
+
+        <label class="lbl-row" style="margin-top:10px;"><input type="checkbox" id="vis_hostCard" checked> Show Free Hosting card</label>
+        <label>Free Hosting — Duration</label>
+        <input type="text" id="hostDuration">
+        <label>Hosting — Description</label>
+        <textarea id="hostBody" style="min-height:40px;"></textarea>
+        <label class="lbl-row"><input type="checkbox" id="vis_hostNote" checked> Hosting — Note (small gray)</label>
+        <textarea id="hostNote" style="min-height:40px;"></textarea>
+      </div>
+    </details>
+
+    <details class="grp">
+      <summary>Annual Maintenance Charges (AMC)</summary>
+      <div class="grp-body">
+        <label class="lbl-row section-toggle"><input type="checkbox" id="vis_amcSection" checked> Show this section in the document</label>
+        <label>AMC % per annum</label>
+        <input type="number" id="amcPct" min="0" step="0.5">
+        <label class="lbl-row"><input type="checkbox" id="vis_amcNote" checked> Note</label>
+        <input type="text" id="amcNote">
+      </div>
+    </details>
+
+    <details class="grp">
+      <summary>Terms &amp; Conditions</summary>
+      <div class="grp-body">
+        <label class="lbl-row section-toggle"><input type="checkbox" id="vis_termsSection" checked> Show this section in the document</label>
+        <label>One clause per line</label>
+        <textarea id="termsText" style="min-height:110px;"></textarea>
+      </div>
+    </details>
+
+    <details class="grp">
+      <summary>Project Handler / Signatory</summary>
+      <div class="grp-body">
+        <label>Left label</label>
+        <input type="text" id="handlerLabel">
+        <label class="lbl-row"><input type="checkbox" id="vis_handlerName" checked> Name</label>
+        <input type="text" id="handlerName">
+        <label class="lbl-row"><input type="checkbox" id="vis_handlerDesignation" checked> Designation</label>
+        <input type="text" id="handlerDesignation">
+        <label class="lbl-row"><input type="checkbox" id="vis_handlerContact" checked> Contact</label>
+        <input type="text" id="handlerContact">
+        <label class="lbl-row" style="margin-top:10px;"><input type="checkbox" id="vis_handlerRightLabel" checked> Right label</label>
+        <input type="text" id="clientForLabel">
+      </div>
+    </details>
+
+  </aside>
+
+  <!-- ======================= PREVIEW ======================= -->
+  <main class="preview-pane">
+    <div class="toolbar no-print">
+      <button id="btnPrint2">Print / Save as PDF</button>
+    </div>
+
+    <div class="sheet" id="sheet">
+      <div class="letterhead">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <img id="pvLogo" src="" alt="logo" style="width:50px;height:50px;object-fit:contain;flex-shrink:0;">
+          <div>
+            <p class="brand-name" id="pvCompanyName" style="margin-bottom:0;"></p>
+            <div class="brand-tag" id="pvCompanyTag"></div>
+          </div>
+        </div>
+        <div class="brand-contact">
+          <div id="pvCompanyAddr1"></div>
+          <div id="pvCompanyAddr2"></div>
+          <div id="pvCompanyEmailPhone"></div>
+          <div id="pvCompanyReg"></div>
+        </div>
+      </div>
+
+      <div class="doc-title-row">
+        <div class="doc-title">QUOTATION</div>
+        <div class="doc-meta" id="pvDocMeta"></div>
+      </div>
+
+      <div class="parties">
+        <div class="party-block">
+          <div class="party-label">Quotation From</div>
+          <div class="party-name" id="pvFromName"></div>
+          <div class="party-addr" id="pvFromAddr"></div>
+        </div>
+        <div class="party-block">
+          <div class="party-label">Quotation To</div>
+          <div class="party-name" id="pvToName"></div>
+          <div class="party-addr" id="pvToAddr"></div>
+        </div>
+      </div>
+
+      <p>Dear Sir/Madam,</p>
+      <p id="pvIntro"></p>
+
+      <div id="secScope">
+        <h2 class="section">Scope of Work</h2>
+        <div id="pvScope"></div>
+        <p style="font-size:12px;color:#6b7280;" id="pvScopeNote"></p>
+      </div>
+
+      <h2 class="section">Commercial Terms</h2>
+      <div class="total-banner">
+        <span class="label">Total Project Cost</span>
+        <span class="value" id="pvTotal"></span>
+      </div>
+
+      <h2 class="section">Payment Schedule</h2>
+      <table class="pay" id="pvPayTable"></table>
+
+      <div id="secTimeline">
+        <h2 class="section">Project Timeline</h2>
+        <div class="timeline-box">
+          <span class="big" id="pvTimelineBig"></span>
+          <span id="pvTimelineNote"></span>
+        </div>
+      </div>
+
+      <div id="secSupport">
+        <h2 class="section">Post-Delivery Support</h2>
+        <div class="support-grid">
+          <div class="support-card" id="pvMaintCard">
+            <div class="card-title" id="pvMaintTitle"></div>
+            <div id="pvMaintBody"></div>
+            <div class="card-note" id="pvMaintNote"></div>
+          </div>
+          <div class="support-card" id="pvHostCard">
+            <div class="card-title" id="pvHostTitle"></div>
+            <div id="pvHostBody"></div>
+            <div class="card-note" id="pvHostNote"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="secAmc">
+        <h2 class="section">Annual Maintenance Charges (AMC)</h2>
+        <div class="timeline-box">
+          <span class="big" id="pvAmcBig"></span>
+          <span id="pvAmcNote"></span>
+        </div>
+      </div>
+
+      <div id="secTerms">
+        <h2 class="section">Terms &amp; Conditions</h2>
+        <ul class="terms" id="pvTerms"></ul>
+      </div>
+
+      <div class="sign-row">
+        <div class="sign-block">
+          <div class="for" id="pvHandlerLabel"></div>
+          <div class="team-list">
+            <div id="pvHandlerName"></div>
+            <div id="pvHandlerDesignation"></div>
+            <div id="pvHandlerContact"></div>
+          </div>
+        </div>
+        <div class="sign-block" style="text-align:right;">
+          <div class="for" id="pvClientForLabel"></div>
+          <div class="sig-line" style="border-top:1px solid #999;width:180px;display:inline-block;text-align:center;padding-top:4px;">Authorized Signatory</div>
+        </div>
+      </div>
+
+      <div class="footer-note" id="pvFooter"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var LS_KEY = "jspQuotationGeneratorState_v1";
+  var DEFAULT_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAA3NCSVQICAjb4U/gAAAA+VBMVEX////mGCHtICnrAAXtGSH+///+/f3uGyT//v/+/Pz9+vuDBQf+9/jBEhibCAzeGB/OExn78fKqEBSQCQ1pBQd1BQXIFBq1Cw9HAgK5EBTsFBmmCg1QAgLWFh3uKitdBAT65+jTFBr10tL79fXvkpX7urzz4eHbJCWwDBDxS1H2homIDA7cFhz7wsTrV1qeDxO1iovbAwUyAAB1DA7fw8Po1tfgy8vFUFLKAQPatbaOVFS+mZmcY2R+SkqQFBe+Ky5XDQ30p6qnd3fLqKhgIyPBdHWbKy1uNTbal5jsPDzAYGHOiInBPD9pGRmbQ0TfdnjgAwbrCQ3vfYCPsNAkAAAAX3pUWHRSYXcgcHJvZmlsZSB0eXBlIEFQUDEAAAiZ40pPzUstykxWKCjKT8vMSeVSAANjEy4TSxNLo0QDAwMLAwgwNDAwNgSSRkC2OVQo0QAFmBqYWZoZmxmaAzGIzwUASLYUyTrUQzIAABToSURBVHic7Z0JWxpJE4AHdYaZnhEYbgTkmDiSBQOGQzlEBUXjGfP/f8xXVd09nFF3v3DkeSg1Huhuv1RVd1d1daEoW9nKVrayla1sZStb2cpWtrKVrWxlK1vZyp8Wfd0D+AOi65Nf65qh6dr4R+oaRvQfxBuwZhgGY8igEA58w+h7+q2/SF9AYBiapkvR8FudsP4KIcPRmOPgJ0VxXNdttppu07WZhQ8ZluMwXVE3WyU6cTCGX+ebjWG3dvvQ6/U6HfjntlarDdtNGx9TwcA2mURXyTUUxco327VBZ3RTN2OxaAwlmstc3dx1BsMGKEdXN99JcI7Kt29fyuW6WTbNiEmCJPWLHmmnM2jbqrrJvkJmpSuscTvq0/DLkX6/XO73zVj5ZdBtt5ogjeFw2C7a2uaqhOyKKU7j8axvRqrVaj8CQuqov9y2m6AClYtiu5sMAmsDzK/28CUSCFQDgUAE30DK5dGgCRC4jmi0mIATbfCsBQNTmZW/vwwE0ukAlwig9Ee3DRtHjQskiYbusbEgKpiWpeRvw+k0vBNKFd8jo/s8QFhswrlhbdT0TSXBHZXh3qYDYeSAjyqh9F/ubcVi3vZqPPoN5YAnXbPyj+lSKh0OcxbSx0tD0XF5/Es2imBWsFbb95elRJgLaaVaHQ0Nhfv2ukf4WQGzd9pPiVSqVCqNSS7v84bFNsyMfjcY/LkOjq66D+FUAkWiBMKveQXcY6MwPhBdZU77MrHPSRKcJHDWVI2PMFZOqeP8Oi/c+lVDU1tnKQBJAUo4TFqpXj5qujUXQq0dDDeszJoRRrtxVdeY/WU/hRypRApAwqVUuPpQ1HQ2NTD5Dfw+BCwgTMPIxbFtx2JsNdtIiOwMtkglODhD1U7OShwkRaZVSiVKj5ZuTIYdOo+5DBnuouCen/Zg+DhsXlB/y53hAASDvRnJaxgF4pb3HjwEJMWllEglLtsQpk8Nir6hHRm+M8PJu41GMW/bQIzIhrGCcEvT1PyXrz9m5NVRLHwq1fwDcXgkYGEPTbCg2XExC37C7Ga7O+hcXFzcgdC/nW6j4cJzwhyKLpeIoxtq/tfurBzaioObRaN4lohLEuEqXQe2LVIj5PIarik2xY53N1fJ71KSEDkOaxe92rBpYaCsLZMEQf7ZezvcmZDDt682acRwTp4ScUHCYRL77cm5V0WTAjfLN7u9u6tMMpnJ5TKZq6tk8uqm023ahlJDoN4QY3p9mRE9gRzs7uz4BYUfvtjlILCqHyHIGAVBTuAhz0XwCwBxuxfPuVw0msshB0gy2Wm4DiYtat+TSXi/q7ngK0tcRSXI3sGeJ34EcXDSsq+Pz+PxSZTEUwvmXm++BSuzjHy3cwMM0Xq9TihXyUyn2wJDMmAiriUzZG03FzUX8zDLIpEg/j0/F/gsNWLo9hcJIkji+2dFRY4G5l0IpqzW7XMmGquDPqJcJ8nnXov8G0IAMK1kBt4QBQJKbX4lXQWIkn+MSxCpkzNXsbw/hj2l3egBBSWGuOQyzwNX5MAMptTAb5JJNK/vyV5Tg6VyOUp5D4QRSCgUj4ckSip1C4P0/lpV7PYLMBCIQMncdfMqgOjTIIDyPXnRUqw1gBgCxCOJh1JhAuEJa1VxrMZLzCybggNI6pmbrs1jFQ/kCjE4TYcHZEtAeVcjav7xGEFC8RAnCe2PNaLDrkRv9WKxssjUYeoxmnuu2aqliLFOgHClJDtgXcYyVPKuRmCtDBIIwaBxne/f2tJHNMNyb03OIXRSj+UGrq5520QOIiTD/SSvLGXqeh+k+K1wXsgKEGQ5jz/aCg/WwUTs27JZFslTkzjqMF8Z+Lg+AXKV8WCuvt+0Gd/IrRCEAUilkM0WCgUBEjo//sJBFNz8t0YxTDuSTtBR6jkYJqwy3npJIJmxaaFxDVx1fq+2fBBfsAAoWWleHogOjzYH/UggUhYkoBPzuUdTwXg3z3TuI55OYDlpi7n5D4No74MEK6CQbCFESgmFJkAs+76KmSGSMtfJS8uYMhtpWnzXIkhqywH5QCPBbIFIECYUKkgQCK201gNlHT2SshntWTBjjS1LmhZQSBDYrgzsielgdSDBLNkWSGFSIxBB3Y+qVZEKppy2aY6Gim5N7nDRtDJS5NTVaar6n1fJxyCoE8QgAzs/vuca0Yz8bQTTjqAVnp3vm+atq09PSBAbdq8yuWmQi4aurgUkmM1yGPiQIJrOWmdpzNcRSoBAyl3LmN4SQhTfvcpFiYRbF4K0dGUdIJVgpQIs5PRZaVqG6rQJJByW5hUo3w3ZzDmPYSgEkuMgGQGirgUEpYIgKKdCIwx2+Jc89Zjmxz/VSLnTAi+eSkuQaSEIkAi1IIiyLpAKmRfiSBBLcR4wNUTZ4DCdmJTLD01vtyhBNNBIdAIkk1sXiE+AkHkFPRCHg0yR9HvzIGha0XpOhsDkJ531gPgqwECSrYxBLDV/Vtr3SMjl+7BfNKYXCFxHIASOchLhKusB2fMJDM4iQGDZc58IRJLAkjKq5WFHvBiEpyVymSVq5IMtyp4v6AsKFvj0Uzo7gCTilEgV1pVOA4iqLdZIdCLBklmPj+z5fARSkSA4/aq4YwQQytKXEmLyGnXtd0CinqOsyUeIJEjePtaIyrTi03l8f18mt5EEQETyegqEEiwIwlNFa9MIgvg4DICcgkZUpsJ78ficshH7qZIwr9H93G4QQWLRupdgyeEqvyZnlyDcwhAElnUAaWLGi+dRuU7Sl9fObHEQKKgG8VZU5orWCOKbAAG3lyAWmZZIdhFJKn05dFRtFkTlpuXp5CqXXLNpAQh8kGkhCGtdnntpO1RKKv0E0bg+b1rRWBnD+aiXv1u7RnwTIMxpHJ9nQ3FpXSkEacFfzGiEqbWYWY+ZXiIS1pT1rCM+zGp7HDs/PZCjw9NsaIIklbhswCPzPmJSHhKsS2hlbRqZJBGzFmaoESQr011kXZcNzZhzdrWGMbDJ6wZRI2uctfg7lymNBCn6lY6yUCNMgIi8FznJuvZaHESgcB/BM0MAOc5Okiw2rSkQLICM5mCTrBi/Gc7yQLhpAYUfd11CIwKEEhOSJL4AROUa6WPKa5xUXQ+I1Ah+OtgbawRNC5bISqVQKPBc/W808mhG+uOkKq7yCLI+0xIgP3fGID93MJ7neaLFICqBmH2eHi7z9HB0TablRw4/mRbI7g6u7Ny0dnd8IllE5nW+EER7jET6kYgpzh5MWBzX5yNAQe/w5aSP7O4gG7cuSgsv1kggwhPdHGVtGjk42OMIe7jG7036CAdBR0GfXwSiMwKpyuwwCIKsfPo1CAR+tCenrj3PR0gjfrEpRjfJLtSIpj1iKlLmVE1hWvoSNPLOFsUQGoE3uZhM+wgiUtQFjnJ8fnwyexalaobzGJhJ2ZcHrrKEk56PNYIgfq4Pv28O5IDHwpXgIhBdY/nb2ZQ9gOhLuArwGR/ZEyQHAOKfMi1hcRg8Iog6s/vVDEuAeCQwB/fcpZjWx7MWmhaxHMybFlcV+snx6e80wmueIwSDIFPHpasFIRY/zl4Hh/MgfBv2e5BAOB0YO4ppPq7loMdH1TZkWjjstzln9wuSnUUgBrNvKecV4AcpePgQe7S0JZy0f25BlGVD/t29GY34uVYOMOaaA9E0q/gQwGL0QFWk7GG78sg048/XN34ahD807yPir/YWaAR837l+Sqe9RDdYV9Ws3+OJ3BpASB0H4rkHEGdGIxJkXiMAYl0/JRLhMQmYV2y4llNd1MfBgbAt//ys5ecfe/BHh7MgOlO0+0tRiy5S9tVquK2vA0RkUWhhP1gIIv6KQIwZENV+xWi+FC5Jkmr4rDibWF0JiAhxRTzye9Oa14iOO5TmQwqCYC89DJPwqJtXl3Ef9rMgYje/O71pfBcEy+uOnkrjpCodAo/m03grAfFSWujxfIuySCP+OdNS8ewh/xpPiQQeT3SHq2euvvIypykQz7QWamQWRMe7J451cpnI7k+SVEf3TGfLqJL/F7lfX9A3EyG+qxFD091fofNxUpVS9g+uugRP/wQIP+WZyf1+DKJSmHv0Yyo9nCilL+/1tdQ04vE0Hup6IJ/UiI4Fj6z4rQIgIe8YBWAe88YyNloTIHyTOw/CD0H/lUbocq9m6flfvtNCYZzohmkYSwqWdC/mw8IzIfx45LMawVpz+/r4lKciRZ47ztPcywL5VC1KUDrKJzRCl7Ngf3t9/DNI9Xei1HY/8dS2NLasq/sTpuUXW/KZUkCv8iEY/JxGVJVZzL7+8dO3Uwlmea4oBCq5vFbnToL+OIh/7COzIIWCOGZHX/lII/B868xQ1PyXH29+HgPzpGoi8XRtM3h0WSQEEvy5w3chPMD4PUjwM6aFt9+vd/C5kem7bPb8/KnB8HL1cu+PBE99cor1TMsZF2dmqcap4h1Ps9+BaIxZlqEYR9923g78ByBAcnxcOK18/VLU8IBoeVffCMR3SnZDMHu+qbyWKGDOVj6lERyoffLlx+7uziG/InTw8/TU9+P1iNotLP2OVfA0W+FOzY88JzRSEaWZXCcfaMSwbffky9e33b2dvQMpFcBwVLrxt8xL+wSSPac6PzE7TYKcFbIhDgIPfwRy7R59+Xb49vZ2sHfwxq/PVb7+ui7aDB2HbjEvEURT3V+F83goVKC6RYQ5/vlNXIQpnsVhGSh45jWuaVwIcvLPt68//G++Hd/Bjx8/vn57/ef6JG+BvbHlmhUHUdzXOILAeHGwaGGn3+SsdRanSnJpXtl3NXJUPLq+Prn+5xe8XR8dFV0HXVuzLOpqsVQMMi33dZ/u6OGIqVDZA1EkSIgXlWff1wh39vFTpMnWHKsQCQJboThdrABTys6DcMZ/BaLgRMW4b6ziFrgmQfYFCzz9kyAeCRreByAG3iDnd8p577AVtoTQDAVBxN08fpEqdD4JEp9Uygca0eZdYVWtBkgjlyWsihmznJ9NgYxRvJLyj0PdVQvs4txfqTTGbxj7cJbUw4SPyAuVocn7I5sHomlq8zacLpVKCQ4zCxLfFxxxfqPnXdNaI4gBo33ASwelBLAkuIkl5kHoVuX4IszmgWgSBKWEyU1keTVoiwIg3hRAKolvLAg2aig+VANhOsXAXDOW7l8+alIjE1MATQObCoIaaT3g7bVAmvfTAW8pXd4bvG68+JSKT5FsrI9go4M29jILYB+wNNdL+ula05nQiHclf7M1AiDW/ciMiFZmVTKx9FnDA8EuNftjlsTlpoJoGrvvRzyQNH6kOw1NmNbZxFLpgXwq97ti0XTDfuzz+h1BA+7y0NKxGY0HMibZVI2AhxjNXsykiiqqqyKQW35pknyEUrYey6ZqRDV0o9GJUStMIYFIJHyveyCJlFhaUhsMQnfSjdozL24rl8scpfrSgJHq+hhEkKQ2FQQ2jIy5L1FT1OmZ5Ui53DfLtTye8mncR/B2SEmYV2pDQdB47O4dVnsLEhO7rfYb2CpD4RpJh7GxFl5A4j2QNhJEhQ2V24mKXiCSpT/IK8wDKXHDwm5nCQmyUbOWTsdKjj28yYka6Rh3lNhL07B0XZcg2A8wkZD7yc0DwXZEjCmNi1w05kk0Vjbrt3jvU5Ea4dtiurJD7nJ576gbBUIH+swd5HJ0hUCQ1E3TqwGdBAmDcXHzeho6nzvVXRkGPO+MDa5y0bHEzOgztfehUyUddvLFl4CIVITDIwiWiG4CiGhlYNgwY10leQ8mcW0oFu00YTCiBbxi6Y2RjFTCuL9PJfAiFfb72gQQGiTm+PPd52Qud4WXA+XlupcGM+QxOGyA1TaFXIIEDSx9dkJFypsCgi0Hdd7oIyckWo9mLhoMOwFKEANAItX0BEopcHbC1LWblvyfGI6l6I3eDTYvENflo8+ZzM2gxfAqvTgeA9Oy2mHYQ1bDXsgFoUqRLlKtWSP4QgiO48BY3WEn+T2XSSJIjhqwPF/UbEXjXeKkadld2OEHJAkVWZ5hLYkmi/yn+r2tXiPMbQzukknRroS38XseNB1KOI/b5Wi6WytHqBJRNJJGjbjUgo5rZGdGI/pqQax25wYbe4AiRJ+lq4taI68qYxDqVqapxdeyWZ2IgtPpwIONIDqBHHqtBFHeEGQ1HbE1zWkNa72Lm+9jubq5uRh0GzbmU6YOx7CpTvFhDIIhcBhADB27FoJp+We7VO7M1f0uEaSNzS2lYJ/OQa3bwMZf1KLTez5RM7BxbL+Y5cBY0LRecacJE5p18nXncLJN5eHO1xNwsZWc62CHy1a70Wh3SYaNZtE1cPhzXVOxEIMx7T5i8vA3wGt2A9WnNtZboZO4R9ezkl9Vs3VsAYktaw3Hxma8jixlM0RP3skKUWwE1nzAG2tVLy+B0XweC/SxHItZDv1nhFj08iMrAsFKEJVsRoAxxmAEC6qJ8bdUfTgSkXw1Itrej9rynHnSCPE/LP9uJaJSHosa8Gr4NvXgtGmpimXkqcOcl5QIVCP9W1cjM8Sa3lnB17dZ5SsS6PQEcnnv1xR7OIrJhAQZWNUcNbTxSqHPySqGLwa38IezP9ZRIUxpduo8ZpQaKfepteEqTzj/PwE/gnnU7j6LFoxCLeXyQ9FYTrPIJQgfJmyNreFdzPQEjcsctRWMcv8aheC6DSvnC/aM5XeFkaQf6d/PNaLZHFloJ1gBgxw8RcT10jf72MRU28xXF8H1e2aywdeoUZRm7SIqW9/G+AXu8sBVl1Yh+v8LrW20BIilABd/u9W7ynEE/Bfv2Mb6A1fZ5FdBw7kX13dDvmgbb9SNuRXeNQMvbptm9KJtG7q2qepACNWyeTZO1+jlA/Kt2sWNzEbEYvW6GctFR4OWpogVfSOFQNxWo9FwLcuyXbc1HGDMhQ2x6igxoHi+63QhBnaU1dXH/AfRVSPfrg16tWGtBp8urpJJnlKhdliY6robtG3ekG1T1UGiqxqz3cZwcJeRrySQHDe5zN31hq089smEDfPmzlhizsIPu9UFffQ69PoON3fwb6fTg9ix3cQtvmPpG21WKNjCHuYslV4qxHaL4C7D7hCCyFYTNaGq4oXP/hbB+gecfHEKRiQdX9QUK9k3eOWYFb4kGoxeg0adrBGl1zSVyaENtyySiUidv0ArloZOvErNBjv5AvlkzLWVrWxlK1vZyla2spWtbGUrW9nKVrayla38cfkfTeyzzG8JXmwAAAAASUVORK5CYII=";
+
+  function fmtINR(n) {
+    n = Math.round(Number(n) || 0);
+    return n.toLocaleString("en-IN");
+  }
+
+  function defaultState() {
+    return {
+      company: {
+        name: "JSP CODERS",
+        tag: "SOFTWARE DESIGN & DEVELOPMENT",
+        addr1: "Aadsar Bass, Ward No. 29",
+        addr2: "Shri Dungargarh, Bikaner, Rajasthan – 331803",
+        email: "jspcoders@gmail.com",
+        phone: "+91 89492 33316",
+        reg: "UDYAM Reg. No.: UDYAM-RJ-08-0136093",
+        logo: DEFAULT_LOGO
+      },
+      qtnNo: "JSPC/QTN/2026-08/03",
+      qtnDate: "2026-08-04",
+      client: {
+        name: "R.U. Biker World",
+        addr: "Shop No. 3, Madhyam Marg, Opposite KL Saini Stadium,\nSwarn Path, Mansarovar Sector 1, Mansarovar,\nJaipur, Rajasthan – 302020"
+      },
+      intro: "Thank you for the opportunity to discuss your requirements. Based on our conversation, we are pleased to submit the following quotation for the design and development of a custom software solution.",
+      scopeBlocks: [
+        { title: "1. Order / Billing Module", items: "Sales order entry, order history and status tracking\nBarcode/QR scanning with live stock visibility during billing\nGST-ready billing — HSN codes, GST rates, discounts, and charge-wise tax handling" },
+        { title: "2. Inventory Management System", items: "Admin dashboard — real-time overview of sales, dispatch, and stock activity\nReal-time, item-wise stock visibility\nPurchase management — Excel-based bulk purchase upload and receiving" },
+        { title: "3. User Based Access System", items: "Role-based permission control (Admin, Staff, Sales, etc.)\nPer-user activity visibility across orders, dispatch, and stock" }
+      ],
+      scopeNote: "Final module list to be confirmed at project kickoff based on your exact workflow; minor adjustments within the above scope will not affect pricing.",
+      total: 78000,
+      milestones: [
+        { label: "Advance / Prepayment — on confirmation of order", pct: 35 },
+        { label: "On handover of first version — approved by Owner", pct: 35 },
+        { label: "Before deployment / go-live", pct: 10 },
+        { label: "After Final Handover", pct: 20 }
+      ],
+      timeline: { value: "1", unit: "Month", note: "from the date of receipt of advance / prepayment, subject to timely inputs and approvals from the client." },
+      maint: { duration: "3 Months", body: "Covers bug fixes and technical issue resolution after delivery.", note: "Does not include upgrades, new features, or design changes — these will be quoted separately." },
+      host: { duration: "3 Months", body: "Covers hosting with 10 GB storage, on a Self Domain.", note: "Domain registration/renewal is managed by the client and not included in this quotation." },
+      amcPct: 10,
+      amcNote: "applicable after the free maintenance period.",
+      termsText: "This quotation is valid for 15 days from the date of issue.\nTaxes, if applicable, shall be charged extra as per prevailing rates.\nAny requirement beyond the agreed scope of work will be treated as a change request and quoted separately.\nHosting beyond the free hosting period will be charged as per the Hosting Provider's billing.\nMaintenance covers bug fixes and technical support only; feature upgrades and enhancements are excluded and available as a separate engagement.\nAfter the free maintenance period, Annual Maintenance Charges (AMC) will apply as specified above, covering the same scope as the free maintenance (bug fixes & technical support only).\nProject timeline is counted from the date of receipt of the advance payment.",
+      handlerLabel: "Project Handler",
+      handlerName: "",
+      handlerDesignation: "",
+      handlerContact: "",
+      clientForLabel: "For R.U. Biker World",
+      visible: {
+        companyTag: true, companyAddr2: true, companyReg: true,
+        intro: true,
+        scopeSection: true, scopeNote: true,
+        timelineSection: true, timelineNote: true,
+        supportSection: true, maintCard: true, maintNote: true, hostCard: true, hostNote: true,
+        amcSection: true, amcNote: true,
+        termsSection: true,
+        handlerName: true, handlerDesignation: true, handlerContact: true, handlerRightLabel: true
+      }
+    };
+  }
+
+  function ensureVisibleDefaults() {
+    var d = defaultState().visible;
+    if (!state.visible) { state.visible = d; return; }
+    for (var k in d) { if (!(k in state.visible)) state.visible[k] = d[k]; }
+  }
+
+  var state = null;
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(LS_KEY);
+      if (raw) { state = JSON.parse(raw); return; }
+    } catch (e) {}
+    state = defaultState();
+  }
+
+  function save() {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function el(id) { return document.getElementById(id); }
+
+  function bindSimple(id, getPath, setPath) {
+    var node = el(id);
+    node.value = getPath();
+    node.addEventListener("input", function () {
+      setPath(node.value);
+      save();
+      renderPreview();
+    });
+  }
+
+  // ---------- Editor: fixed fields ----------
+  function bindFixedFields() {
+    bindSimple("companyName", function () { return state.company.name; }, function (v) { state.company.name = v; });
+    bindSimple("companyTag", function () { return state.company.tag; }, function (v) { state.company.tag = v; });
+    bindSimple("companyAddr1", function () { return state.company.addr1; }, function (v) { state.company.addr1 = v; });
+    bindSimple("companyAddr2", function () { return state.company.addr2; }, function (v) { state.company.addr2 = v; });
+    bindSimple("companyEmail", function () { return state.company.email; }, function (v) { state.company.email = v; });
+    bindSimple("companyPhone", function () { return state.company.phone; }, function (v) { state.company.phone = v; });
+    bindSimple("companyReg", function () { return state.company.reg; }, function (v) { state.company.reg = v; });
+
+    bindSimple("qtnNo", function () { return state.qtnNo; }, function (v) { state.qtnNo = v; });
+    bindSimple("qtnDate", function () { return state.qtnDate; }, function (v) { state.qtnDate = v; });
+
+    bindSimple("clientName", function () { return state.client.name; }, function (v) { state.client.name = v; });
+    bindSimple("clientAddr", function () { return state.client.addr; }, function (v) { state.client.addr = v; });
+
+    bindSimple("intro", function () { return state.intro; }, function (v) { state.intro = v; });
+    bindSimple("scopeNote", function () { return state.scopeNote; }, function (v) { state.scopeNote = v; });
+
+    bindSimple("total", function () { return state.total; }, function (v) { state.total = Number(v) || 0; });
+
+    bindSimple("timelineValue", function () { return state.timeline.value; }, function (v) { state.timeline.value = v; });
+    bindSimple("timelineUnit", function () { return state.timeline.unit; }, function (v) { state.timeline.unit = v; });
+    bindSimple("timelineNote", function () { return state.timeline.note; }, function (v) { state.timeline.note = v; });
+
+    bindSimple("maintDuration", function () { return state.maint.duration; }, function (v) { state.maint.duration = v; });
+    bindSimple("maintBody", function () { return state.maint.body; }, function (v) { state.maint.body = v; });
+    bindSimple("maintNote", function () { return state.maint.note; }, function (v) { state.maint.note = v; });
+    bindSimple("hostDuration", function () { return state.host.duration; }, function (v) { state.host.duration = v; });
+    bindSimple("hostBody", function () { return state.host.body; }, function (v) { state.host.body = v; });
+    bindSimple("hostNote", function () { return state.host.note; }, function (v) { state.host.note = v; });
+
+    bindSimple("amcPct", function () { return state.amcPct; }, function (v) { state.amcPct = Number(v) || 0; });
+    bindSimple("amcNote", function () { return state.amcNote; }, function (v) { state.amcNote = v; });
+
+    bindSimple("termsText", function () { return state.termsText; }, function (v) { state.termsText = v; });
+
+    bindSimple("handlerLabel", function () { return state.handlerLabel; }, function (v) { state.handlerLabel = v; });
+    bindSimple("handlerName", function () { return state.handlerName; }, function (v) { state.handlerName = v; });
+    bindSimple("handlerDesignation", function () { return state.handlerDesignation; }, function (v) { state.handlerDesignation = v; });
+    bindSimple("handlerContact", function () { return state.handlerContact; }, function (v) { state.handlerContact = v; });
+    bindSimple("clientForLabel", function () { return state.clientForLabel; }, function (v) { state.clientForLabel = v; });
+
+    el("logoFile").addEventListener("change", function (evt) {
+      var file = evt.target.files && evt.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        state.company.logo = e.target.result;
+        save();
+        renderPreview();
+        el("logoPreview").src = state.company.logo;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // ---------- Editor: show/hide toggles ----------
+  function bindVisToggle(checkboxId, key) {
+    var node = el(checkboxId);
+    node.checked = !!state.visible[key];
+    node.addEventListener("change", function () {
+      state.visible[key] = node.checked;
+      save();
+      renderPreview();
+    });
+  }
+
+  function bindVisToggles() {
+    [
+      ["vis_companyTag", "companyTag"], ["vis_companyAddr2", "companyAddr2"], ["vis_companyReg", "companyReg"],
+      ["vis_intro", "intro"],
+      ["vis_scopeSection", "scopeSection"], ["vis_scopeNote", "scopeNote"],
+      ["vis_timelineSection", "timelineSection"], ["vis_timelineNote", "timelineNote"],
+      ["vis_supportSection", "supportSection"], ["vis_maintCard", "maintCard"], ["vis_maintNote", "maintNote"],
+      ["vis_hostCard", "hostCard"], ["vis_hostNote", "hostNote"],
+      ["vis_amcSection", "amcSection"], ["vis_amcNote", "amcNote"],
+      ["vis_termsSection", "termsSection"],
+      ["vis_handlerName", "handlerName"], ["vis_handlerDesignation", "handlerDesignation"],
+      ["vis_handlerContact", "handlerContact"], ["vis_handlerRightLabel", "handlerRightLabel"]
+    ].forEach(function (pair) { bindVisToggle(pair[0], pair[1]); });
+  }
+
+  // ---------- Editor: dynamic scope blocks ----------
+  function renderScopeEditor() {
+    var wrap = el("scopeEditorList");
+    wrap.innerHTML = "";
+    state.scopeBlocks.forEach(function (block, i) {
+      var card = document.createElement("div");
+      card.className = "block-card";
+
+      var hd = document.createElement("div");
+      hd.className = "block-card-hd";
+      var span = document.createElement("span");
+      span.textContent = "Section " + (i + 1);
+      var rm = document.createElement("button");
+      rm.className = "mini-btn";
+      rm.textContent = "Remove";
+      rm.addEventListener("click", function () {
+        state.scopeBlocks.splice(i, 1);
+        save();
+        renderScopeEditor();
+        renderPreview();
+      });
+      hd.appendChild(span);
+      hd.appendChild(rm);
+      card.appendChild(hd);
+
+      var titleInput = document.createElement("input");
+      titleInput.type = "text";
+      titleInput.value = block.title;
+      titleInput.placeholder = "Section title";
+      titleInput.style.marginBottom = "4px";
+      titleInput.addEventListener("input", function () {
+        state.scopeBlocks[i].title = titleInput.value;
+        save();
+        renderPreview();
+      });
+      card.appendChild(titleInput);
+
+      var itemsArea = document.createElement("textarea");
+      itemsArea.value = block.items;
+      itemsArea.placeholder = "One bullet point per line";
+      itemsArea.style.minHeight = "60px";
+      itemsArea.addEventListener("input", function () {
+        state.scopeBlocks[i].items = itemsArea.value;
+        save();
+        renderPreview();
+      });
+      card.appendChild(itemsArea);
+
+      wrap.appendChild(card);
+    });
+  }
+
+  el("btnAddScope").addEventListener("click", function () {
+    state.scopeBlocks.push({ title: "New Section", items: "New item" });
+    save();
+    renderScopeEditor();
+    renderPreview();
+  });
+
+  // ---------- Editor: dynamic milestones ----------
+  function updatePctSum() {
+    var sum = state.milestones.reduce(function (a, m) { return a + (Number(m.pct) || 0); }, 0);
+    var node = el("pctSum");
+    node.textContent = "Total: " + sum + "% " + (sum === 100 ? "✓" : "(should be 100%)");
+    node.className = "pct-sum " + (sum === 100 ? "ok" : "warn");
+  }
+
+  function renderMilestoneEditor() {
+    var wrap = el("milestoneEditorList");
+    wrap.innerHTML = "";
+    state.milestones.forEach(function (m, i) {
+      var row = document.createElement("div");
+      row.className = "milestone-row";
+
+      var labelInput = document.createElement("input");
+      labelInput.type = "text";
+      labelInput.value = m.label;
+      labelInput.addEventListener("input", function () {
+        state.milestones[i].label = labelInput.value;
+        save();
+        renderPreview();
+      });
+
+      var pctInput = document.createElement("input");
+      pctInput.type = "number";
+      pctInput.min = "0";
+      pctInput.value = m.pct;
+      pctInput.addEventListener("input", function () {
+        state.milestones[i].pct = Number(pctInput.value) || 0;
+        amtSpan.textContent = "₹" + fmtINR(state.total * state.milestones[i].pct / 100);
+        updatePctSum();
+        save();
+        renderPreview();
+      });
+
+      var amtSpan = document.createElement("span");
+      amtSpan.className = "milestone-amt";
+      amtSpan.textContent = "₹" + fmtINR(state.total * m.pct / 100);
+
+      var rm = document.createElement("button");
+      rm.className = "mini-btn";
+      rm.textContent = "×";
+      rm.addEventListener("click", function () {
+        state.milestones.splice(i, 1);
+        save();
+        renderMilestoneEditor();
+        renderPreview();
+      });
+
+      row.appendChild(labelInput);
+      row.appendChild(pctInput);
+      row.appendChild(amtSpan);
+      row.appendChild(rm);
+      wrap.appendChild(row);
+    });
+    updatePctSum();
+  }
+
+  el("btnAddMilestone").addEventListener("click", function () {
+    state.milestones.push({ label: "New Milestone", pct: 0 });
+    save();
+    renderMilestoneEditor();
+    renderPreview();
+  });
+
+  // ---------- Preview rendering ----------
+  function fmtDate(iso) {
+    if (!iso) return "";
+    var parts = iso.split("-");
+    if (parts.length !== 3) return iso;
+    return parts[2] + "-" + parts[1] + "-" + parts[0];
+  }
+
+  function esc(s) {
+    var d = document.createElement("div");
+    d.textContent = s == null ? "" : s;
+    return d.innerHTML;
+  }
+
+  function linesToHtml(text) {
+    return esc(text).split("\n").filter(function (l) { return l.trim() !== ""; }).join("<br>");
+  }
+
+  function renderPreview() {
+    el("pvLogo").src = state.company.logo || DEFAULT_LOGO;
+    el("logoPreview").src = state.company.logo || DEFAULT_LOGO;
+    el("pvCompanyName").textContent = state.company.name;
+    el("pvCompanyTag").textContent = state.company.tag;
+    el("pvCompanyAddr1").textContent = state.company.addr1;
+    el("pvCompanyAddr2").textContent = state.company.addr2;
+    el("pvCompanyEmailPhone").textContent = state.company.email + (state.company.phone ? "  |  " + state.company.phone : "");
+    el("pvCompanyReg").textContent = state.company.reg;
+
+    el("pvDocMeta").innerHTML = "Quotation No.: " + esc(state.qtnNo) + "<br>Date: " + esc(fmtDate(state.qtnDate));
+
+    el("pvFromName").textContent = state.company.name;
+    el("pvFromAddr").innerHTML = esc(state.company.addr1) + ",<br>" + esc(state.company.addr2) + "<br>" +
+      esc(state.company.email) + (state.company.phone ? " | " + esc(state.company.phone) : "");
+
+    el("pvToName").textContent = state.client.name;
+    el("pvToAddr").innerHTML = linesToHtml(state.client.addr);
+
+    el("pvIntro").textContent = state.intro;
+
+    var scopeHtml = "";
+    state.scopeBlocks.forEach(function (block) {
+      var itemsHtml = block.items.split("\n").filter(function (l) { return l.trim() !== ""; })
+        .map(function (l) { return "<li>" + esc(l) + "</li>"; }).join("");
+      scopeHtml += '<div class="scope-block"><div class="scope-title">' + esc(block.title) +
+        '</div><ul class="scope-sub">' + itemsHtml + "</ul></div>";
+    });
+    el("pvScope").innerHTML = scopeHtml;
+    el("pvScopeNote").textContent = state.scopeNote;
+
+    el("pvTotal").textContent = "₹" + fmtINR(state.total) + "/-";
+
+    var rows = "<tr><th>Milestone</th><th class=\"amt\">%</th><th class=\"amt\">Amount</th></tr>";
+    state.milestones.forEach(function (m) {
+      var amt = state.total * (Number(m.pct) || 0) / 100;
+      rows += "<tr><td>" + esc(m.label) + "</td><td class=\"amt\">" + esc(m.pct) + "%</td><td class=\"amt\">₹" + fmtINR(amt) + "/-</td></tr>";
+    });
+    var pctSum = state.milestones.reduce(function (a, m) { return a + (Number(m.pct) || 0); }, 0);
+    rows += "<tr class=\"total\"><td>Total</td><td class=\"amt\">" + pctSum + "%</td><td class=\"amt\">₹" + fmtINR(state.total) + "/-</td></tr>";
+    el("pvPayTable").innerHTML = rows;
+
+    el("pvTimelineBig").textContent = state.timeline.value + " " + state.timeline.unit;
+    el("pvTimelineNote").textContent = state.timeline.note;
+
+    el("pvMaintTitle").textContent = "Free Maintenance — " + state.maint.duration;
+    el("pvMaintBody").textContent = state.maint.body;
+    el("pvMaintNote").textContent = state.maint.note;
+
+    el("pvHostTitle").textContent = "Free Hosting — " + state.host.duration;
+    el("pvHostBody").textContent = state.host.body;
+    el("pvHostNote").textContent = state.host.note;
+
+    var amcAmt = state.total * (Number(state.amcPct) || 0) / 100;
+    el("pvAmcBig").textContent = state.amcPct + "% p.a.";
+    el("pvAmcNote").textContent = "₹" + fmtINR(amcAmt) + "/yr — " + state.amcNote;
+
+    var termsHtml = state.termsText.split("\n").filter(function (l) { return l.trim() !== ""; })
+      .map(function (l) { return "<li>" + esc(l) + "</li>"; }).join("");
+    el("pvTerms").innerHTML = termsHtml;
+
+    el("pvHandlerLabel").textContent = state.handlerLabel;
+    el("pvHandlerName").textContent = state.handlerName ? "Name: " + state.handlerName : "Name: ____________________";
+    el("pvHandlerDesignation").textContent = state.handlerDesignation ? "Designation: " + state.handlerDesignation : "Designation: ____________________";
+    el("pvHandlerContact").textContent = state.handlerContact ? "Contact: " + state.handlerContact : "Contact: ____________________";
+    el("pvClientForLabel").textContent = state.clientForLabel;
+
+    var footerAddr = state.company.addr1 + (state.visible.companyAddr2 && state.company.addr2 ? ", " + state.company.addr2 : "");
+    el("pvFooter").textContent = state.company.name + " · " + footerAddr +
+      " · " + state.company.email + (state.company.phone ? " · " + state.company.phone : "") +
+      (state.visible.companyReg && state.company.reg ? " · " + state.company.reg.replace("UDYAM Reg. No.: ", "") : "");
+
+    // ---- show/hide (kept as a plain CSS display toggle so hidden rows collapse
+    // and whatever follows shifts up automatically — no manual reflow needed) ----
+    function show(id, flag) { el(id).style.display = flag ? "" : "none"; }
+    var v = state.visible;
+    show("pvCompanyTag", v.companyTag);
+    show("pvCompanyAddr2", v.companyAddr2);
+    show("pvCompanyReg", v.companyReg);
+    show("pvIntro", v.intro);
+    show("secScope", v.scopeSection);
+    show("pvScopeNote", v.scopeSection && v.scopeNote);
+    show("secTimeline", v.timelineSection);
+    show("pvTimelineNote", v.timelineNote);
+    show("secSupport", v.supportSection);
+    show("pvMaintCard", v.supportSection && v.maintCard);
+    show("pvMaintNote", v.maintNote);
+    show("pvHostCard", v.supportSection && v.hostCard);
+    show("pvHostNote", v.hostNote);
+    show("secAmc", v.amcSection);
+    show("pvAmcNote", v.amcNote);
+    show("secTerms", v.termsSection);
+    show("pvHandlerName", v.handlerName);
+    show("pvHandlerDesignation", v.handlerDesignation);
+    show("pvHandlerContact", v.handlerContact);
+    show("pvClientForLabel", v.handlerRightLabel);
+  }
+
+  function fillFixedInputs() {
+    el("companyName").value = state.company.name;
+    el("companyTag").value = state.company.tag;
+    el("companyAddr1").value = state.company.addr1;
+    el("companyAddr2").value = state.company.addr2;
+    el("companyEmail").value = state.company.email;
+    el("companyPhone").value = state.company.phone;
+    el("companyReg").value = state.company.reg;
+    el("logoPreview").src = state.company.logo || DEFAULT_LOGO;
+
+    el("qtnNo").value = state.qtnNo;
+    el("qtnDate").value = state.qtnDate;
+
+    el("clientName").value = state.client.name;
+    el("clientAddr").value = state.client.addr;
+
+    el("intro").value = state.intro;
+    el("scopeNote").value = state.scopeNote;
+
+    el("total").value = state.total;
+
+    el("timelineValue").value = state.timeline.value;
+    el("timelineUnit").value = state.timeline.unit;
+    el("timelineNote").value = state.timeline.note;
+
+    el("maintDuration").value = state.maint.duration;
+    el("maintBody").value = state.maint.body;
+    el("maintNote").value = state.maint.note;
+    el("hostDuration").value = state.host.duration;
+    el("hostBody").value = state.host.body;
+    el("hostNote").value = state.host.note;
+
+    el("amcPct").value = state.amcPct;
+    el("amcNote").value = state.amcNote;
+
+    el("termsText").value = state.termsText;
+
+    el("handlerLabel").value = state.handlerLabel;
+    el("handlerName").value = state.handlerName;
+    el("handlerDesignation").value = state.handlerDesignation;
+    el("handlerContact").value = state.handlerContact;
+    el("clientForLabel").value = state.clientForLabel;
+  }
+
+  function init() {
+    load();
+    ensureVisibleDefaults();
+    fillFixedInputs();
+    bindFixedFields();
+    bindVisToggles();
+    renderScopeEditor();
+    renderMilestoneEditor();
+    renderPreview();
+
+    el("btnPrint").addEventListener("click", function () { window.print(); });
+    el("btnPrint2").addEventListener("click", function () { window.print(); });
+    el("btnReset").addEventListener("click", function () {
+      if (!confirm("Clear everything and start a brand-new quotation? This cannot be undone.")) return;
+      try { localStorage.removeItem(LS_KEY); } catch (e) {}
+      state = defaultState();
+      fillFixedInputs();
+      bindVisToggles();
+      renderScopeEditor();
+      renderMilestoneEditor();
+      renderPreview();
+      save();
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+</script>
+</body>
+</html>
